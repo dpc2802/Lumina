@@ -1,0 +1,140 @@
+{
+  "products": [
+    {
+      "id": "cmq64v77j0000mly4pl5sok6t",
+      "name": "Anillo Solitario Eternité",
+      "category": "Anillos",
+      "material": "Oro Blanco de 18 Quilates y Diamante",
+      "price": 4500,
+      "description": "Un símbolo atemporal de elegancia. El solitario Eternité destaca por su diamante central de corte brillante, engarzado meticulosamente en oro blanco puro para maximizar el reflejo de luz. Su diseño minimalista permite que la piedra preciosa sea la absoluta protagonista, ideal para compromisos que trascienden el tiempo.",
+      "image": "https://images.unsplash.com/photo-1596944924616-7b38e7cfac36?q=80&w=800&auto=format&fit=crop",
+      "isFeatured": true,
+      "stock": 3,
+      "createdAt": "2026-06-09T04:22:02.048Z",
+      "updatedAt": "2026-06-09T05:15:09.648Z"
+    },
+    {
+      "id": "cmq64v79q0001mly4bn4f5xlv",
+      "name": "Collar Gota de Zafiro",
+      "category": "Collares",
+      "material": "Platino y Zafiro Azul",
+      "price": 12000,
+      "description": "La máxima expresión del lujo misterioso. Este collar sostiene un zafiro azul profundo en forma de gota, rodeado por un delicado halo de microdiamantes. La cadena de platino asegura durabilidad extrema manteniendo un brillo platinado eterno. Una pieza majestuosa para galas y eventos de élite.",
+      "image": "https://images.unsplash.com/photo-1617038220319-276d3cfab638?q=80&w=800&auto=format&fit=crop",
+      "isFeatured": true,
+      "stock": 4,
+      "createdAt": "2026-06-09T04:22:02.127Z",
+      "updatedAt": "2026-06-09T07:38:09.287Z"
+    },
+    {
+      "id": "cmq64v7a60002mly4v6w34qe8",
+      "name": "Pulsera Tenis de Diamantes",
+      "category": "Brazaletes",
+      "material": "Oro Blanco de 18 Quilates",
+      "price": 8200,
+      "description": "La clásica pulsera tenis, reinventada por Lumina. Con una línea ininterrumpida de diamantes perfectamente calibrados, esta pieza ofrece una flexibilidad extraordinaria que se adapta a la muñeca como una segunda piel. Un resplandor continuo que eleva cualquier atuendo nocturno.",
+      "image": "/uploads/1780990838576-bracelet.png",
+      "isFeatured": true,
+      "stock": 0,
+      "createdAt": "2026-06-09T04:22:02.143Z",
+      "updatedAt": "2026-06-09T07:40:38.579Z"
+    },
+    {
+      "id": "cmq64v7ah0003mly4nvl3le6d",
+      "name": "Aretes Perla del Sur",
+      "category": "Aretes",
+      "material": "Oro Amarillo de 14 Quilates",
+      "price": 3100,
+      "description": "Elegancia clásica con un toque orgánico. Seleccionadas a mano en los mares del sur, estas perlas excepcionales flotan bajo un discreto engaste de oro amarillo. Su lustre natural aporta luz al rostro, convirtiéndolos en la elección predilecta para la mujer sofisticada de hoy.",
+      "image": "/uploads/1780983952900-earrings.png",
+      "isFeatured": true,
+      "stock": 5,
+      "createdAt": "2026-06-09T04:22:02.153Z",
+      "updatedAt": "2026-06-09T07:59:46.935Z"
+    },
+    {
+      "id": "cmq64v7b30005mly4nilxstn8",
+      "name": "Cadena Eslabón Cubano",
+      "category": "Collares",
+      "material": "Oro Amarillo de 18 Quilates",
+      "price": 7800,
+      "description": "Una declaración de poder. Esta gruesa cadena de eslabones cubanos ha sido pulida eslabón por eslabón a mano, logrando un acabado espejo que atrapa la mirada. Su peso sustancial y cierre de seguridad oculto la convierten en la pieza insignia del lujo urbano contemporáneo.",
+      "image": "/uploads/1780983916815-chain.png",
+      "isFeatured": false,
+      "stock": 2,
+      "createdAt": "2026-06-09T04:22:02.176Z",
+      "updatedAt": "2026-06-09T07:33:53.146Z"
+    }
+  ],
+  "customers": [
+    {
+      "id": "cmq6bc8ze0005ml74xzrwp8gq",
+      "name": "Duvan Palacios",
+      "email": "duvanonealsod28@gmail.com",
+      "phone": "3148883214",
+      "tier": "Oro",
+      "spent": 28135,
+      "createdAt": "2026-06-09T07:23:15.194Z",
+      "updatedAt": "2026-06-09T07:59:46.948Z"
+    }
+  ],
+  "orders": [
+    {
+      "id": "cmq6bpx7i000bml74ckpjh926",
+      "orderNumber": "LUM-1021",
+      "status": "Procesando",
+      "payment": "Stripe",
+      "totalAmount": 7845,
+      "createdAt": "2026-06-09T07:33:53.119Z",
+      "updatedAt": "2026-06-09T07:33:53.119Z",
+      "customerId": "cmq6bc8ze0005ml74xzrwp8gq",
+      "items": [
+        {
+          "id": "cmq6bpx7i000dml7469e1yadh",
+          "quantity": 1,
+          "priceAtPurchase": 7800,
+          "orderId": "cmq6bpx7i000bml74ckpjh926",
+          "productId": "cmq64v7b30005mly4nilxstn8"
+        }
+      ]
+    },
+    {
+      "id": "cmq6bqivf000fml74pziiflfg",
+      "orderNumber": "LUM-9006",
+      "status": "Procesando",
+      "payment": "Stripe",
+      "totalAmount": 12045,
+      "createdAt": "2026-06-09T07:34:21.195Z",
+      "updatedAt": "2026-06-09T07:34:21.195Z",
+      "customerId": "cmq6bc8ze0005ml74xzrwp8gq",
+      "items": [
+        {
+          "id": "cmq6bqivf000hml74lz0uviab",
+          "quantity": 1,
+          "priceAtPurchase": 12000,
+          "orderId": "cmq6bqivf000fml74pziiflfg",
+          "productId": "cmq64v79q0001mly4bn4f5xlv"
+        }
+      ]
+    },
+    {
+      "id": "cmq6bwy6o000jml74su1wqova",
+      "orderNumber": "LUM-8138",
+      "status": "Procesando",
+      "payment": "Stripe",
+      "totalAmount": 8245,
+      "createdAt": "2026-06-09T07:39:20.976Z",
+      "updatedAt": "2026-06-09T07:39:20.976Z",
+      "customerId": "cmq6bc8ze0005ml74xzrwp8gq",
+      "items": [
+        {
+          "id": "cmq6bwy6o000lml74g7ey1iba",
+          "quantity": 1,
+          "priceAtPurchase": 8200,
+          "orderId": "cmq6bwy6o000jml74su1wqova",
+          "productId": "cmq64v7a60002mly4v6w34qe8"
+        }
+      ]
+    }
+  ]
+}
