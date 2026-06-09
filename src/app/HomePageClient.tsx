@@ -1,12 +1,10 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import { ShoppingBag, X, CreditCard, Wallet, MessageCircle, Heart, ArrowRight, ChevronDown, Menu, CheckCircle, ShieldCheck, User } from "lucide-react";
 import NextLink from "next/link";
 import Image from "next/image";
 import { getProducts } from "@/app/actions";
 import Footer from "@/components/Footer";
-
 export default function Storefront({ initialProducts }: { initialProducts: any[] }) {
   const [products, setProducts] = useState<any[]>(initialProducts);
   const [cartOpen, setCartOpen] = useState(false);
@@ -15,31 +13,24 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
   const [wishlistItems, setWishlistItems] = useState<any[]>([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [quickViewProduct, setQuickViewProduct] = useState<any | null>(null);
-  const [payMethod, setPayMethod] = useState<'stripe'|'paypal'|'wa'>('stripe');
   const [toast, setToast] = useState("");
   const [scrolled, setScrolled] = useState(false);
-
-
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
   const addToCart = (product: any) => {
     setCartItems([...cartItems, { ...product, cartId: Date.now() }]);
     showToast(`${product.name} added to your collection`);
   };
-
   const removeFromCart = (cartId: number) => {
     setCartItems(cartItems.filter(item => item.cartId !== cartId));
   };
-
   const showToast = (msg: string) => {
     setToast(msg);
     setTimeout(() => setToast(""), 3000);
   };
-
   const toggleWishlist = (product: any) => {
     if (wishlistItems.find(item => item.id === product.id)) {
       setWishlistItems(wishlistItems.filter(item => item.id !== product.id));
@@ -49,9 +40,7 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
       showToast('Añadido a tu lista de deseos');
     }
   };
-
   const cartTotal = cartItems.reduce((sum, item) => sum + item.price, 0);
-
   return (
     <div className="min-h-screen flex flex-col bg-pearl font-sans">
       {/* Premium Toast Notification */}
@@ -61,7 +50,6 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
           {toast}
         </div>
       )}
-
       {/* Floating Glassmorphism Navigation */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-500 px-6 md:px-12 flex items-center justify-between ${scrolled ? 'bg-black/80 backdrop-blur-xl shadow-lg h-20' : 'bg-transparent h-28'}`}>
         <div className="flex-1 flex justify-start">
@@ -79,11 +67,9 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
             </NextLink>
           </div>
         </div>
-
         <div className="font-serif text-lg md:text-3xl tracking-[0.1em] md:tracking-[0.2em] uppercase text-white flex items-center justify-center text-center leading-none">
           Lumina <span className="text-rg mx-1 md:mx-2">·</span> Joyas
         </div>
-
         <div className="flex-1 flex justify-end items-center gap-6">
           {/* Icons */}
           <div className="flex gap-6 items-center text-white">
@@ -112,7 +98,6 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
           </div>
         </div>
       </nav>
-
       {/* Hero Section */}
       <header className="relative w-full min-h-screen flex flex-col justify-between items-center overflow-hidden pt-32 pb-8">
         {/* Background Image */}
@@ -127,10 +112,8 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
           {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black/90"></div>
         </div>
-
         {/* Top Spacer */}
         <div className="w-full"></div>
-
         {/* Hero Content */}
         <div className="relative z-10 px-6 text-center max-w-4xl mx-auto flex flex-col items-center w-full">
           <div className="animate-in slide-in-from-bottom-10 fade-in duration-1000 delay-300 flex flex-col items-center">
@@ -153,14 +136,12 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
             </NextLink>
           </div>
         </div>
-
         {/* Scroll Indicator */}
         <div className="relative z-10 flex flex-col items-center gap-2 animate-pulse opacity-80 mt-12">
           <span className="text-[10px] tracking-[3px] uppercase text-white font-medium">Descubrir</span>
           <ChevronDown size={20} className="text-white" strokeWidth={1.5} />
         </div>
       </header>
-
       {/* Social Proof Bar */}
       <section className="bg-[#0a0a0a] py-10 border-t border-b border-white/5 relative z-10">
         <div className="max-w-7xl mx-auto px-6 text-center">
@@ -173,7 +154,6 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
           </div>
         </div>
       </section>
-
       {/* Editorial Collections Layout */}
       <section id="collections" className="px-6 md:px-12 pt-32 pb-16 max-w-[1400px] mx-auto w-full relative">
         <div className="flex flex-col md:flex-row justify-between items-end mb-24 border-b border-charcoal/10 pb-12">
@@ -188,7 +168,6 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
             Descubre colecciones nacidas de la obsesión por el detalle. Cada pieza cuenta una historia de herencia, precisión y oro puro de 18 quilates.
           </p>
         </div>
-
         <div className="flex flex-col md:flex-row gap-16 lg:gap-24 items-start">
           {/* Left Large Editorial Portrait */}
           <div className="w-full md:w-5/12 group cursor-pointer">
@@ -205,7 +184,6 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
               </span>
             </div>
           </div>
-
           {/* Right Staggered Section */}
           <div className="w-full md:w-7/12 flex flex-col md:mt-40">
             
@@ -223,7 +201,6 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
                 </span>
               </div>
             </div>
-
             {/* Typography / Custom Piece Block */}
             <div className="w-full bg-pearl pt-16 relative">
               <div className="absolute top-0 right-0 w-24 h-[1px] bg-rg"></div>
@@ -239,11 +216,9 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
                 <ArrowRight size={12} className="group-hover:translate-x-2 transition-transform" />
               </a>
             </div>
-
           </div>
         </div>
       </section>
-
       {/* Premium Geometric Divider */}
       <div className="w-full flex justify-center items-center py-6 opacity-60">
         <div className="w-[30%] max-w-[200px] h-[1px] bg-gradient-to-r from-transparent to-charcoal/20"></div>
@@ -252,7 +227,6 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
         </div>
         <div className="w-[30%] max-w-[200px] h-[1px] bg-gradient-to-l from-transparent to-charcoal/20"></div>
       </div>
-
       {/* Featured Products */}
       <section className="bg-white px-6 md:px-12 pt-16 pb-32 w-full">
         <div className="max-w-[1400px] mx-auto">
@@ -262,7 +236,6 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
             <div className="w-12 h-[1px] bg-charcoal/20 mb-8"></div>
             <NextLink href="/coleccion" className="text-[10px] tracking-[3px] uppercase text-charcoal3 hover:text-rg transition-colors">Descubrir el Catálogo Completo</NextLink>
           </div>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {products.filter(p => p.isFeatured).map((p) => {
               return (
@@ -281,15 +254,11 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
                     <div className="absolute top-4 right-4 w-2 h-2 border-t border-r border-charcoal/30 transition-colors group-hover:border-rg"></div>
                     <div className="absolute bottom-4 left-4 w-2 h-2 border-b border-l border-charcoal/30 transition-colors group-hover:border-rg"></div>
                     <div className="absolute bottom-4 right-4 w-2 h-2 border-b border-r border-charcoal/30 transition-colors group-hover:border-rg"></div>
-
                     {(p.badge || p.stock === 0) && (
                       <span className={`absolute z-10 top-6 left-6 text-white text-[9px] tracking-[3px] uppercase px-3 py-1 ${p.stock === 0 ? 'bg-red-900/80 backdrop-blur-sm' : 'bg-charcoal'}`}>
                         {p.stock === 0 ? 'Agotado' : p.badge}
                       </span>
                     )}
-
-
-
                     <div className="relative w-full h-full transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-105">
                        <Image src={p.image} alt={p.name} fill className="object-cover mix-blend-multiply" />
                     </div>
@@ -303,7 +272,6 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
                     <div className="w-6 h-[1px] bg-charcoal/20 mx-auto mb-4"></div>
                     <p className="font-serif text-lg font-light text-charcoal tracking-wide mb-2">${p.price.toLocaleString()}</p>
                   </div>
-
                   {/* Add to Cart Footer */}
                   <button 
                     disabled={p.stock === 0}
@@ -318,8 +286,6 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
           </div>
         </div>
       </section>
-
-
       {/* Craftsmanship Section (Story) */}
       <section id="heritage" className="w-full bg-[#0a0a0a] text-white flex flex-col md:flex-row relative z-10">
         <div className="w-full md:w-1/2 relative min-h-[500px] md:min-h-screen">
@@ -351,9 +317,7 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
           </div>
         </div>
       </section>
-
       <Footer />
-
       {/* Shopping Cart Sidebar (Mismo funcionamiento premium) */}
       {cartOpen && (
         <div className="fixed inset-0 z-[100] flex justify-end">
@@ -392,7 +356,6 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
                 })
               )}
             </div>
-
             {cartItems.length > 0 && (
               <div className="p-8 border-t border-black/5 bg-white shadow-[0_-10px_40px_rgba(0,0,0,0.03)]">
                 <div className="flex justify-between items-center mb-8">
@@ -401,62 +364,18 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
                 </div>
                 
                 <div className="mb-6">
-                  <p className="text-[9px] tracking-[2px] uppercase text-charcoal3 mb-4">Método de Pago</p>
-                  <div className="flex flex-col gap-3">
-                    <button 
-                      onClick={() => setPayMethod('stripe')}
-                      className={`flex items-center gap-4 p-4 text-left border ${payMethod==='stripe' ? 'border-rg bg-rg-pale/30' : 'border-black/10 hover:border-black/30'} transition-all`}
-                    >
-                      <CreditCard size={20} className={payMethod==='stripe' ? 'text-rg' : 'text-charcoal3'} strokeWidth={1.5} />
-                      <div>
-                        <div className="text-xs font-medium text-charcoal">Tarjeta de Crédito</div>
-                        <div className="text-[10px] text-charcoal3 mt-1 font-light">Pago seguro vía Stripe</div>
-                      </div>
-                    </button>
-                    <button 
-                      onClick={() => setPayMethod('paypal')}
-                      className={`flex items-center gap-4 p-4 text-left border ${payMethod==='paypal' ? 'border-rg bg-rg-pale/30' : 'border-black/10 hover:border-black/30'} transition-all`}
-                    >
-                      <Wallet size={20} className={payMethod==='paypal' ? 'text-rg' : 'text-charcoal3'} strokeWidth={1.5} />
-                      <div>
-                        <div className="text-xs font-medium text-charcoal">PayPal</div>
-                        <div className="text-[10px] text-charcoal3 mt-1 font-light">Paga con tu saldo o tarjeta</div>
-                      </div>
-                    </button>
-                    <button 
-                      onClick={() => setPayMethod('wa')}
-                      className={`flex items-center gap-4 p-4 text-left border ${payMethod==='wa' ? 'border-rg bg-rg-pale/30' : 'border-black/10 hover:border-black/30'} transition-all`}
-                    >
-                      <MessageCircle size={20} className={payMethod==='wa' ? 'text-rg' : 'text-charcoal3'} strokeWidth={1.5} />
-                      <div>
-                        <div className="text-xs font-medium text-charcoal">Atención Personalizada</div>
-                        <div className="text-[10px] text-charcoal3 mt-1 font-light">Finalizar vía WhatsApp</div>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-
-                {payMethod === 'wa' ? (
-                  <button 
-                    onClick={() => showToast('Abriendo WhatsApp...')}
-                    className="w-full bg-[#25D366] text-white py-5 text-[10px] tracking-[3px] uppercase font-medium flex items-center justify-center gap-3 hover:bg-[#1ebd59] transition-colors"
-                  >
-                    <MessageCircle size={18} /> Confirmar por WhatsApp
-                  </button>
-                ) : (
                   <NextLink 
                     href="/checkout"
                     className="w-full bg-charcoal text-white py-5 text-[10px] tracking-[3px] uppercase font-medium hover:bg-black transition-colors flex justify-center items-center"
                   >
                     Finalizar Compra
                   </NextLink>
-                )}
+                </div>
               </div>
             )}
           </div>
         </div>
       )}
-
       {/* Wishlist Sidebar */}
       {wishlistOpen && (
         <div className="fixed inset-0 z-50 flex justify-end">
@@ -535,7 +454,6 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
           </div>
         </div>
       )}
-
       {/* Quick View Modal */}
       {quickViewProduct && (
         <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 sm:p-6">
