@@ -350,9 +350,14 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
                   <span className="text-[11px] uppercase tracking-widest text-charcoal/60">Subtotal</span>
                   <span className="font-serif text-2xl text-charcoal">${cartTotal}</span>
                 </div>
-                <NextLink href="/checkout" className="w-full bg-charcoal text-white py-5 text-[10px] tracking-[3px] uppercase hover:bg-rg transition-colors duration-300 flex justify-center items-center gap-3">
-                  Finalizar Compra <ArrowRight size={14} />
-                </NextLink>
+                <div className="mb-6">
+                  <NextLink 
+                    href="/checkout"
+                    className="w-full bg-charcoal text-white py-5 text-[10px] tracking-[3px] uppercase font-medium hover:bg-black transition-colors flex justify-center items-center"
+                  >
+                    Finalizar Compra
+                  </NextLink>
+                </div>
               </div>
             )}
           </div>
