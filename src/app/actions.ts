@@ -77,15 +77,11 @@ export async function createProduct(formData: FormData) {
   if (imageFile && imageFile.size > 0) {
     const bytes = await imageFile.arrayBuffer();
     const buffer = Buffer.from(bytes);
-
-    const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
-    await mkdir(uploadsDir, { recursive: true });
+    const mimeType = imageFile.type || 'image/jpeg';
     
-    const fileName = `${Date.now()}-${imageFile.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
-    const filePath = path.join(uploadsDir, fileName);
-    
-    await writeFile(filePath, buffer);
-    imagePath = `/uploads/${fileName}`;
+    // En Vercel no podemos guardar archivos locales, así que lo convertimos a Base64
+    const base64Image = buffer.toString('base64');
+    imagePath = `data:${mimeType};base64,${base64Image}`;
   }
 
   const product = await prisma.product.create({
@@ -127,15 +123,11 @@ export async function updateProduct(id: string, formData: FormData) {
   if (imageFile && imageFile.size > 0) {
     const bytes = await imageFile.arrayBuffer();
     const buffer = Buffer.from(bytes);
-
-    const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
-    await mkdir(uploadsDir, { recursive: true });
+    const mimeType = imageFile.type || 'image/jpeg';
     
-    const fileName = `${Date.now()}-${imageFile.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
-    const filePath = path.join(uploadsDir, fileName);
-    
-    await writeFile(filePath, buffer);
-    updateData.image = `/uploads/${fileName}`;
+    // En Vercel no podemos guardar archivos locales
+    const base64Image = buffer.toString('base64');
+    updateData.image = `data:${mimeType};base64,${base64Image}`;
   }
 
   await prisma.product.update({
