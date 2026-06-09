@@ -1,7 +1,7 @@
 import { getProducts } from "@/app/actions";
-import Storefront from "./HomePageClient";
+import Catalog from "./ColeccionClient";
 
-export default async function Home() {
+export default async function Coleccion() {
   const products = await getProducts();
-  return <Storefront initialProducts={products} />;
+  return <Catalog initialProducts={products} />;
 }
