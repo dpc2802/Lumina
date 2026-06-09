@@ -13,6 +13,7 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
   const [products, setProducts] = useState<any[]>(initialProducts);
 
   const [cartOpen, setCartOpen] = useState(false);
+  const [wishlistOpen, setWishlistOpen] = useState(false);
   const { cartItems, addToCart: contextAddToCart, removeFromCart, cartTotal, cartCount } = useCart();
   const [wishlistItems, setWishlistItems] = useState<any[]>([]);
   const [scrolled, setScrolled] = useState(false);
