@@ -12,10 +12,8 @@ import { toast } from "sonner";
 export default function Catalog({ initialProducts }: { initialProducts: any[] }) {
   const [products, setProducts] = useState<any[]>(initialProducts);
 
-
   const [cartOpen, setCartOpen] = useState(false);
-  const [wishlistOpen, setWishlistOpen] = useState(false);
-  const { cartItems, addToCart, removeFromCart, cartTotal, cartCount } = useCart();
+  const { cartItems, addToCart: contextAddToCart, removeFromCart, cartTotal, cartCount } = useCart();
   const [wishlistItems, setWishlistItems] = useState<any[]>([]);
   const [scrolled, setScrolled] = useState(false);
   const [activeFilter, setActiveFilter] = useState('Todos');
@@ -30,8 +28,8 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleAddToCart = (product: any) => {
-    addToCart(product);
+  const addToCart = (product: any) => {
+    contextAddToCart(product);
     toast.success(`${product.name} añadido a la cesta`, {
       description: "Puedes proceder al pago cuando desees."
     });
@@ -53,7 +51,7 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
   } else if (sortOrder === 'price-desc') {
     filteredProducts.sort((a, b) => b.price - a.price);
   } else {
-    filteredProducts.sort((a, b) => b.id - a.id); // 'recent'
+    filteredProducts.sort((a, b) => a.id - b.id); // 'recent'
   }
 
   return (
@@ -196,7 +194,7 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
                   {/* Add to Cart Footer inside the card */}
                   <button 
                     disabled={p.stock === 0}
-                    onClick={(e) => { e.stopPropagation(); handleAddToCart(p); }}
+                    onClick={(e) => { e.stopPropagation(); addToCart(p); }}
                     className={`w-full text-white py-3 md:py-4 text-[9px] md:text-[10px] tracking-[3px] uppercase flex justify-center items-center gap-2 md:gap-3 ${viewMode === 'list' ? 'mt-4' : ''} ${p.stock === 0 ? 'bg-charcoal/30 cursor-not-allowed' : 'bg-charcoal hover:bg-rg transition-colors duration-300'}`}
                   >
                     {p.stock === 0 ? 'Sin Stock' : 'Añadir a la cesta'} {p.stock > 0 && <ArrowRight size={12} />}
@@ -283,7 +281,7 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
                  <div className="flex gap-4">
                    <button 
                       disabled={selectedProduct.stock === 0}
-                      onClick={() => { handleAddToCart(selectedProduct); setSelectedProduct(null); setCartOpen(true); }}
+                      onClick={() => { addToCart(selectedProduct); setSelectedProduct(null); setCartOpen(true); }}
                       className={`flex-1 text-white py-6 text-[11px] tracking-[4px] uppercase border border-transparent transition-all duration-500 flex justify-center items-center gap-4 group ${selectedProduct.stock === 0 ? 'bg-charcoal/30 cursor-not-allowed' : 'bg-charcoal hover:bg-white hover:text-charcoal hover:border-charcoal'}`}
                     >
                       {selectedProduct.stock === 0 ? 'Pieza Agotada' : 'Añadir a la cesta'} {selectedProduct.stock > 0 && <ArrowRight size={14} className="group-hover:translate-x-2 transition-transform" />}
@@ -393,7 +391,7 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
                     </div>
                     <div className="flex flex-col gap-2">
                       <button 
-                        onClick={() => { handleAddToCart(item); toggleWishlist(item); setWishlistOpen(false); setCartOpen(true); }}
+                        onClick={() => { addToCart(item); toggleWishlist(item); setWishlistOpen(false); setCartOpen(true); }}
                         className="w-10 h-10 border border-charcoal/20 flex items-center justify-center hover:bg-charcoal hover:text-white transition-colors"
                         title="Mover al Carrito"
                       >
