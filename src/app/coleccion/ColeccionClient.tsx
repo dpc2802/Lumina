@@ -3,7 +3,9 @@
 import { useState, useEffect } from "react";
 import { ShoppingBag, X, Heart, ArrowRight, SlidersHorizontal, ChevronDown, Grid2X2, List, Maximize2 } from "lucide-react";
 import NextLink from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { getProducts } from "@/app/actions";
 import Footer from "@/components/Footer";
 import { useCart } from "@/components/CartContext";
@@ -11,18 +13,27 @@ import { toast } from "sonner";
 
 export default function Catalog({ initialProducts }: { initialProducts: any[] }) {
   const [products, setProducts] = useState<any[]>(initialProducts);
-
+  
+  useEffect(() => {
+    setProducts(initialProducts);
+  }, [initialProducts]);
 
   const [cartOpen, setCartOpen] = useState(false);
   const [wishlistOpen, setWishlistOpen] = useState(false);
-  const { cartItems, addToCart, removeFromCart, cartTotal, cartCount } = useCart();
+  const { cartItems, addToCart: contextAddToCart, removeFromCart, cartTotal, cartCount } = useCart();
   const [wishlistItems, setWishlistItems] = useState<any[]>([]);
   const [scrolled, setScrolled] = useState(false);
-  const [activeFilter, setActiveFilter] = useState('Todos');
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const activeFilter = searchParams.get('categoria') || 'Todos';
   const [filterOpen, setFilterOpen] = useState(false);
   const [sortOrder, setSortOrder] = useState('recent');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
+
+  const { scrollYProgress } = useScroll();
+  const headerY = useTransform(scrollYProgress, [0, 0.3], ["0%", "30%"]);
+  const headerOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -30,8 +41,8 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleAddToCart = (product: any) => {
-    addToCart(product);
+  const addToCart = (product: any) => {
+    contextAddToCart(product);
     toast.success(`${product.name} añadido a la cesta`, {
       description: "Puedes proceder al pago cuando desees."
     });
@@ -47,13 +58,13 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
 
   const categories = ['Todos', 'Cadenas', 'Brazaletes', 'Anillos', 'Aretes'];
   
-  let filteredProducts = activeFilter === 'Todos' ? [...products] : products.filter(p => p.category === activeFilter);
+  let filteredProducts = [...products];
   if (sortOrder === 'price-asc') {
     filteredProducts.sort((a, b) => a.price - b.price);
   } else if (sortOrder === 'price-desc') {
     filteredProducts.sort((a, b) => b.price - a.price);
   } else {
-    filteredProducts.sort((a, b) => b.id - a.id); // 'recent'
+    filteredProducts.sort((a, b) => a.id - b.id); // 'recent'
   }
 
   return (
@@ -73,8 +84,8 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
           </div>
         </div>
 
-        <NextLink href="/" className="font-serif text-2xl md:text-3xl tracking-[0.2em] uppercase flex items-center justify-center">
-          Lumina <span className="text-rg mx-2 text-xl">·</span> Joyas
+        <NextLink href="/" className="font-serif text-base md:text-3xl tracking-[0.1em] md:tracking-[0.2em] uppercase flex items-center justify-center whitespace-nowrap">
+          Lumina <span className="text-rg mx-1 md:mx-2 text-xl">·</span> Joyas
         </NextLink>
 
         <div className="flex-1 flex justify-end items-center gap-6">
@@ -99,125 +110,176 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
 
       {/* Cinematic Catalog Hero */}
       <header className="relative pt-40 pb-24 px-6 md:px-12 w-full min-h-[50vh] flex flex-col items-center justify-center text-center overflow-hidden bg-charcoal">
-        <Image src="/hero5.png" alt="Colección Completa" fill className="object-cover opacity-60 mix-blend-overlay" />
+        <motion.div style={{ y: headerY }} className="absolute inset-0 origin-center">
+          <Image src="/hero5.png" alt="Colección Completa" fill className="object-cover opacity-60 mix-blend-overlay scale-105" priority />
+        </motion.div>
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/90 via-[#0a0a0a]/40 to-[#0a0a0a]/20"></div>
         
-        <div className="relative z-10 w-full max-w-3xl mx-auto">
-          <span className="text-[10px] tracking-[4px] uppercase text-rg font-medium mb-6 block">Catálogo Completo</span>
-          <h1 className="font-serif text-5xl md:text-7xl text-white font-light tracking-tight mb-8">Nuestras Colecciones</h1>
-          <div className="w-16 h-[1px] bg-rg/50 mx-auto mb-8"></div>
-          <p className="text-sm text-white/80 font-light leading-relaxed">
+        <motion.div style={{ opacity: headerOpacity }} className="relative z-10 w-full max-w-3xl mx-auto">
+          <motion.span initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} className="text-[10px] tracking-[4px] uppercase text-rg font-medium mb-6 block">Catálogo Completo</motion.span>
+          <motion.h1 initial={{ opacity: 0, filter: "blur(10px)" }} animate={{ opacity: 1, filter: "blur(0px)" }} transition={{ duration: 1.5, delay: 0.2 }} className="font-serif text-5xl md:text-7xl text-white font-light tracking-tight mb-8">Nuestras Colecciones</motion.h1>
+          <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 0.6 }} className="w-16 h-[1px] bg-rg/50 mx-auto mb-8 origin-center"></motion.div>
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 1 }} className="text-sm text-white/80 font-light leading-relaxed px-4">
             Explora nuestra meticulosa selección de piezas atemporales. Cada joya es una declaración de herencia y precisión geométrica.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
       </header>
 
-      {/* Premium Filters & View Toggle */}
-      <section className="w-full max-w-[1400px] mx-auto px-6 md:px-12 py-12 flex flex-col md:flex-row justify-between items-center gap-8 border-b border-charcoal/5 mb-12">
-        <div className="flex items-center gap-8 overflow-x-auto w-full md:w-auto pb-4 md:pb-0 scrollbar-hide">
-          {categories.map(cat => (
-            <button 
-              key={cat} 
-              onClick={() => setActiveFilter(cat)}
-              className={`text-[10px] tracking-[3px] uppercase whitespace-nowrap transition-all duration-300 ${activeFilter === cat ? 'text-charcoal border-b border-charcoal pb-1' : 'text-charcoal3 hover:text-rg'}`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-        <div className="flex items-center gap-6 text-[10px] tracking-[2px] uppercase text-charcoal3 shrink-0">
-          <div className="flex items-center gap-3 border-r border-charcoal/10 pr-6 hidden md:flex">
-             <button onClick={() => setViewMode('grid')} className={`p-1.5 transition-colors ${viewMode === 'grid' ? 'text-charcoal bg-charcoal/5' : 'hover:text-rg'}`}><Grid2X2 size={16}/></button>
-             <button onClick={() => setViewMode('list')} className={`p-1.5 transition-colors ${viewMode === 'list' ? 'text-charcoal bg-charcoal/5' : 'hover:text-rg'}`}><List size={16}/></button>
+      {/* Premium Filters & View Toggle (Sticky) */}
+      <div className="sticky top-20 z-40 bg-pearl/80 backdrop-blur-xl border-b border-charcoal/5 mb-12 shadow-sm transition-all duration-300">
+        <section className="w-full max-w-[1400px] mx-auto px-6 md:px-12 py-4 md:py-6 flex flex-col md:flex-row justify-between items-center gap-4 md:gap-8">
+          <div className="flex items-center gap-8 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
+            {categories.map(cat => (
+              <button 
+                key={cat} 
+                onClick={() => {
+                  const newCat = cat === 'Todos' ? '' : cat.toLowerCase();
+                  router.push(newCat ? `/coleccion?categoria=${newCat}` : '/coleccion', { scroll: false });
+                }}
+                className={`text-[9px] md:text-[10px] tracking-[3px] uppercase whitespace-nowrap transition-all duration-300 ${activeFilter === (cat === 'Todos' ? 'Todos' : cat.toLowerCase()) ? 'text-charcoal border-b border-charcoal pb-1 font-medium' : 'text-charcoal3 hover:text-rg'}`}
+              >
+                {cat}
+              </button>
+            ))}
           </div>
-          <div className="relative">
-            <button onClick={() => setFilterOpen(!filterOpen)} className="flex items-center gap-2 hover:text-charcoal transition-colors cursor-pointer">
-              <SlidersHorizontal size={14} /> Filtrar <ChevronDown size={14} className={`transition-transform duration-300 ${filterOpen ? 'rotate-180' : ''}`} />
-            </button>
-            {filterOpen && (
-              <div className="absolute top-full mt-4 right-0 w-56 bg-white border border-charcoal/10 shadow-2xl z-20 flex flex-col p-6 animate-in fade-in slide-in-from-top-2">
-                 <span className="text-[8px] tracking-[4px] uppercase text-charcoal/50 mb-4 block border-b border-charcoal/5 pb-2">Ordenar por</span>
-                 <button onClick={() => { setSortOrder('price-asc'); setFilterOpen(false); }} className={`text-[10px] tracking-[2px] uppercase text-left py-3 transition-colors ${sortOrder === 'price-asc' ? 'text-rg' : 'text-charcoal hover:text-rg'}`}>Precio: Menor a Mayor</button>
-                 <button onClick={() => { setSortOrder('price-desc'); setFilterOpen(false); }} className={`text-[10px] tracking-[2px] uppercase text-left py-3 transition-colors ${sortOrder === 'price-desc' ? 'text-rg' : 'text-charcoal hover:text-rg'}`}>Precio: Mayor a Menor</button>
-                 <button onClick={() => { setSortOrder('recent'); setFilterOpen(false); }} className={`text-[10px] tracking-[2px] uppercase text-left py-3 transition-colors ${sortOrder === 'recent' ? 'text-rg' : 'text-charcoal hover:text-rg'}`}>Más Recientes</button>
-              </div>
-            )}
+          <div className="flex items-center gap-6 text-[10px] tracking-[2px] uppercase text-charcoal3 shrink-0 self-end md:self-auto">
+            <div className="flex items-center gap-3 border-r border-charcoal/10 pr-6 hidden md:flex">
+               <button onClick={() => setViewMode('grid')} className={`p-1.5 transition-colors ${viewMode === 'grid' ? 'text-charcoal bg-charcoal/5' : 'hover:text-rg'}`}><Grid2X2 size={16}/></button>
+               <button onClick={() => setViewMode('list')} className={`p-1.5 transition-colors ${viewMode === 'list' ? 'text-charcoal bg-charcoal/5' : 'hover:text-rg'}`}><List size={16}/></button>
+            </div>
+            <div className="relative">
+              <button onClick={() => setFilterOpen(!filterOpen)} className="flex items-center gap-2 hover:text-charcoal transition-colors cursor-pointer bg-white/50 px-4 py-2 rounded-sm border border-charcoal/5 shadow-sm">
+                <SlidersHorizontal size={14} /> Filtrar <ChevronDown size={14} className={`transition-transform duration-300 ${filterOpen ? 'rotate-180' : ''}`} />
+              </button>
+              <AnimatePresence>
+              {filterOpen && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
+                  className="absolute top-full mt-2 right-0 w-56 bg-white/95 backdrop-blur-md border border-charcoal/10 shadow-2xl z-50 flex flex-col p-6 rounded-sm"
+                >
+                   <span className="text-[8px] tracking-[4px] uppercase text-charcoal/50 mb-4 block border-b border-charcoal/5 pb-2">Ordenar por</span>
+                   <button onClick={() => { setSortOrder('price-asc'); setFilterOpen(false); }} className={`text-[10px] tracking-[2px] uppercase text-left py-3 transition-colors ${sortOrder === 'price-asc' ? 'text-rg' : 'text-charcoal hover:text-rg'}`}>Precio: Menor a Mayor</button>
+                   <button onClick={() => { setSortOrder('price-desc'); setFilterOpen(false); }} className={`text-[10px] tracking-[2px] uppercase text-left py-3 transition-colors ${sortOrder === 'price-desc' ? 'text-rg' : 'text-charcoal hover:text-rg'}`}>Precio: Mayor a Menor</button>
+                   <button onClick={() => { setSortOrder('recent'); setFilterOpen(false); }} className={`text-[10px] tracking-[2px] uppercase text-left py-3 transition-colors ${sortOrder === 'recent' ? 'text-rg' : 'text-charcoal hover:text-rg'}`}>Más Recientes</button>
+                </motion.div>
+              )}
+              </AnimatePresence>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
       {/* Products Grid / List */}
-      <section className="w-full max-w-[1400px] mx-auto px-6 md:px-12 pb-32">
-        <div className={`grid gap-4 lg:gap-8 ${viewMode === 'grid' ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4' : 'grid-cols-1 md:grid-cols-2'}`}>
-          {filteredProducts.map((p) => {
-            return (
-              <div 
-                key={p.id} 
-                onClick={() => setSelectedProduct(p)}
-                className={`group cursor-pointer flex ${viewMode === 'grid' ? 'flex-col' : 'flex-row'} h-full bg-white border border-charcoal/10 hover:border-charcoal/30 transition-all duration-500 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] animate-in fade-in zoom-in-95 duration-500`}
-              >
-                
-                {/* Image Container */}
-                <div className={`relative ${viewMode === 'grid' ? 'h-48 md:h-[22rem] w-full' : 'h-full w-1/2'} border-b border-charcoal/5 overflow-hidden bg-[#fafafa] p-4 md:p-6 shrink-0`}>
-                  <div className="absolute top-4 left-4 w-2 h-2 border-t border-l border-charcoal/30 transition-colors group-hover:border-rg"></div>
-                  <div className="absolute top-4 right-4 w-2 h-2 border-t border-r border-charcoal/30 transition-colors group-hover:border-rg"></div>
-                  <div className="absolute bottom-4 left-4 w-2 h-2 border-b border-l border-charcoal/30 transition-colors group-hover:border-rg"></div>
-                  <div className="absolute bottom-4 right-4 w-2 h-2 border-b border-r border-charcoal/30 transition-colors group-hover:border-rg"></div>
-
-                  {(p.badge || p.stock === 0) && (
-                    <span className={`absolute z-10 top-4 left-4 md:top-6 md:left-6 text-white text-[8px] md:text-[9px] tracking-[3px] uppercase px-2 md:px-3 py-1 ${p.stock === 0 ? 'bg-red-900/80 backdrop-blur-sm' : 'bg-charcoal'}`}>
-                      {p.stock === 0 ? 'Agotado' : p.badge}
-                    </span>
-                  )}
-
-                  <button 
-                    onClick={(e) => { e.stopPropagation(); toggleWishlist(p); }}
-                    className="absolute top-4 right-14 md:top-6 md:right-16 z-20 transition-colors opacity-0 group-hover:opacity-100 duration-300 bg-white/80 p-2 backdrop-blur-sm rounded-full hover:bg-white"
-                  >
-                    <Heart size={14} className={wishlistItems.find(item => item.id === p.id) ? "text-rg fill-rg" : "text-charcoal3 hover:text-rg"} strokeWidth={1.5} />
-                  </button>
-                  <button className="absolute top-4 right-4 md:top-6 md:right-6 z-20 text-charcoal3 hover:text-charcoal transition-colors opacity-0 group-hover:opacity-100 duration-300 bg-white/80 p-2 backdrop-blur-sm rounded-full">
-                    <Maximize2 size={14} strokeWidth={1.5} />
-                  </button>
-
-                  <div className="relative w-full h-full transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-105">
-                     <Image src={p.image} alt={p.name} fill className="object-cover mix-blend-multiply p-4" />
-                  </div>
-                </div>
-                
-                {/* Content */}
-                <div className={`flex flex-col flex-1 ${viewMode === 'grid' ? 'p-4 md:p-8 text-center' : 'p-6 md:p-10 justify-center text-left'} bg-white`}>
-                  <p className="text-[8px] md:text-[9px] tracking-[3px] uppercase text-rg mb-2 md:mb-3">{p.material}</p>
-                  <h3 className={`font-serif ${viewMode === 'grid' ? 'text-lg md:text-xl' : 'text-2xl md:text-3xl'} text-charcoal mb-2 md:mb-4 font-light leading-snug`}>{p.name}</h3>
-                  <div className="flex-1"></div>
-                  <div className={`w-6 h-[1px] bg-charcoal/20 mb-3 md:mb-4 ${viewMode === 'grid' ? 'mx-auto' : ''}`}></div>
-                  <p className={`font-serif ${viewMode === 'grid' ? 'text-base md:text-lg' : 'text-xl md:text-2xl'} font-light text-charcoal tracking-wide mb-4`}>${p.price.toLocaleString()}</p>
+      <section className="w-full max-w-[1400px] mx-auto px-6 md:px-12 pb-32 min-h-[50vh]">
+        {filteredProducts.length === 0 ? (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+            className="flex flex-col items-center justify-center text-center py-32 border border-charcoal/5 bg-white/50"
+          >
+            <div className="w-16 h-16 border border-charcoal/10 rounded-full flex items-center justify-center mb-6">
+              <SlidersHorizontal size={24} className="text-charcoal/40" strokeWidth={1} />
+            </div>
+            <h3 className="font-serif text-2xl text-charcoal mb-4">No se encontraron piezas</h3>
+            <p className="text-sm text-charcoal/60 font-light mb-8 max-w-md">No hay joyas disponibles bajo estos criterios de búsqueda en este momento.</p>
+            <button onClick={() => router.push('/coleccion')} className="text-[10px] tracking-[3px] uppercase text-white bg-charcoal px-8 py-3 hover:bg-rg transition-colors">
+              Ver Toda la Colección
+            </button>
+          </motion.div>
+        ) : (
+          <motion.div 
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: { staggerChildren: 0.1 }
+              }
+            }}
+            className={`grid gap-4 md:gap-8 ${viewMode === 'grid' ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4' : 'grid-cols-1 md:grid-cols-2'}`}
+          >
+            {filteredProducts.map((p) => {
+              return (
+                <motion.div 
+                  key={p.id} 
+                  variants={{
+                    hidden: { opacity: 0, y: 30 },
+                    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+                  }}
+                  onClick={() => setSelectedProduct(p)}
+                  className={`group cursor-pointer flex ${viewMode === 'grid' ? 'flex-col' : 'flex-row'} h-full bg-white border border-charcoal/10 hover:border-charcoal/30 transition-all duration-500 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)]`}
+                >
                   
-                  {/* Add to Cart Footer inside the card */}
-                  <button 
-                    disabled={p.stock === 0}
-                    onClick={(e) => { e.stopPropagation(); handleAddToCart(p); }}
-                    className={`w-full text-white py-3 md:py-4 text-[9px] md:text-[10px] tracking-[3px] uppercase flex justify-center items-center gap-2 md:gap-3 ${viewMode === 'list' ? 'mt-4' : ''} ${p.stock === 0 ? 'bg-charcoal/30 cursor-not-allowed' : 'bg-charcoal hover:bg-rg transition-colors duration-300'}`}
-                  >
-                    {p.stock === 0 ? 'Sin Stock' : 'Añadir a la cesta'} {p.stock > 0 && <ArrowRight size={12} />}
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+                  {/* Image Container */}
+                  <div className={`relative ${viewMode === 'grid' ? 'h-48 md:h-[22rem] w-full' : 'h-full w-1/2 min-h-[160px]'} border-b border-charcoal/5 overflow-hidden bg-[#fafafa] p-4 md:p-6 shrink-0`}>
+                    <div className="absolute top-4 left-4 w-2 h-2 border-t border-l border-charcoal/30 transition-colors group-hover:border-rg"></div>
+                    <div className="absolute top-4 right-4 w-2 h-2 border-t border-r border-charcoal/30 transition-colors group-hover:border-rg"></div>
+                    <div className="absolute bottom-4 left-4 w-2 h-2 border-b border-l border-charcoal/30 transition-colors group-hover:border-rg"></div>
+                    <div className="absolute bottom-4 right-4 w-2 h-2 border-b border-r border-charcoal/30 transition-colors group-hover:border-rg"></div>
+
+                    {(p.badge || p.stock === 0) && (
+                      <span className={`absolute z-10 top-4 left-4 md:top-6 md:left-6 text-white text-[8px] md:text-[9px] tracking-[3px] uppercase px-2 md:px-3 py-1 ${p.stock === 0 ? 'bg-red-900/80 backdrop-blur-sm' : 'bg-charcoal'}`}>
+                        {p.stock === 0 ? 'Agotado' : p.badge}
+                      </span>
+                    )}
+
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); toggleWishlist(p); }}
+                      className="absolute top-4 right-14 md:top-6 md:right-16 z-20 transition-colors opacity-0 group-hover:opacity-100 duration-300 bg-white/80 p-2 backdrop-blur-sm rounded-full hover:bg-white"
+                    >
+                      <Heart size={14} className={wishlistItems.find(item => item.id === p.id) ? "text-rg fill-rg" : "text-charcoal3 hover:text-rg"} strokeWidth={1.5} />
+                    </button>
+                    <button className="absolute top-4 right-4 md:top-6 md:right-6 z-20 text-charcoal3 hover:text-charcoal transition-colors opacity-0 group-hover:opacity-100 duration-300 bg-white/80 p-2 backdrop-blur-sm rounded-full">
+                      <Maximize2 size={14} strokeWidth={1.5} />
+                    </button>
+
+                    <div className="relative w-full h-full transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-105">
+                       <Image src={p.image} alt={p.name} fill className="object-cover mix-blend-multiply p-4" />
+                    </div>
+                  </div>
+                  
+                  {/* Content */}
+                  <div className={`flex flex-col flex-1 ${viewMode === 'grid' ? 'p-4 md:p-8 text-center' : 'p-6 md:p-10 justify-center text-left'} bg-white`}>
+                    <p className="text-[8px] md:text-[9px] tracking-[3px] uppercase text-rg mb-2 md:mb-3">{p.category}</p>
+                    <h3 className={`font-serif ${viewMode === 'grid' ? 'text-lg md:text-xl' : 'text-xl md:text-3xl'} text-charcoal mb-2 md:mb-4 font-light leading-snug`}>{p.name}</h3>
+                    <div className="flex-1"></div>
+                    <div className={`w-6 h-[1px] bg-charcoal/20 mb-3 md:mb-4 ${viewMode === 'grid' ? 'mx-auto' : ''}`}></div>
+                    <p className={`font-serif ${viewMode === 'grid' ? 'text-base md:text-lg' : 'text-xl md:text-2xl'} font-light text-charcoal tracking-wide mb-4`}>${Number(p.price).toLocaleString('es-ES')}</p>
+                    
+                    {/* Add to Cart Footer inside the card */}
+                    <button 
+                      disabled={p.stock === 0}
+                      onClick={(e) => { e.stopPropagation(); addToCart(p); }}
+                      className={`w-full text-white py-3 md:py-4 text-[9px] md:text-[10px] tracking-[3px] uppercase flex justify-center items-center gap-2 md:gap-3 ${viewMode === 'list' ? 'mt-4' : ''} ${p.stock === 0 ? 'bg-charcoal/30 cursor-not-allowed' : 'bg-charcoal hover:bg-rg transition-colors duration-300'}`}
+                    >
+                      {p.stock === 0 ? 'Sin Stock' : 'Añadir a la cesta'} {p.stock > 0 && <ArrowRight size={12} />}
+                    </button>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        )}
       </section>
 
       <Footer />
 
       {/* Quick View Modal - High Refinery Edition */}
+      <AnimatePresence>
       {selectedProduct && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-12">
           {/* Backdrop */}
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-md animate-in fade-in duration-300" onClick={() => setSelectedProduct(null)}></div>
+          <motion.div 
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="absolute inset-0 bg-black/70 backdrop-blur-md" 
+            onClick={() => setSelectedProduct(null)}
+          ></motion.div>
           
           {/* Modal Content */}
-          <div className="relative bg-white w-full max-w-6xl max-h-[90vh] flex flex-col md:flex-row shadow-[0_30px_100px_rgba(0,0,0,0.8)] animate-in fade-in zoom-in-95 duration-400 overflow-hidden border border-charcoal/10">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="relative bg-white w-full max-w-6xl max-h-[90vh] flex flex-col md:flex-row shadow-[0_30px_100px_rgba(0,0,0,0.8)] overflow-hidden border border-charcoal/10"
+          >
             <button onClick={() => setSelectedProduct(null)} className="absolute top-6 right-6 z-30 p-2 text-charcoal hover:text-rg transition-colors bg-white/80 backdrop-blur-md rounded-full shadow-sm">
                <X size={20} strokeWidth={1.5} />
             </button>
@@ -257,7 +319,7 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
                    </span>
                  </div>
                  
-                 <p className="font-serif text-3xl text-charcoal mb-10">${selectedProduct.price.toLocaleString()}</p>
+                 <p className="font-serif text-3xl text-charcoal mb-10">${selectedProduct.price.toLocaleString('es-ES')}</p>
                  
                  {/* Geometric Divider */}
                  <div className="w-full flex items-center justify-center gap-4 mb-10">
@@ -283,7 +345,7 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
                  <div className="flex gap-4">
                    <button 
                       disabled={selectedProduct.stock === 0}
-                      onClick={() => { handleAddToCart(selectedProduct); setSelectedProduct(null); setCartOpen(true); }}
+                      onClick={() => { addToCart(selectedProduct); setSelectedProduct(null); setCartOpen(true); }}
                       className={`flex-1 text-white py-6 text-[11px] tracking-[4px] uppercase border border-transparent transition-all duration-500 flex justify-center items-center gap-4 group ${selectedProduct.stock === 0 ? 'bg-charcoal/30 cursor-not-allowed' : 'bg-charcoal hover:bg-white hover:text-charcoal hover:border-charcoal'}`}
                     >
                       {selectedProduct.stock === 0 ? 'Pieza Agotada' : 'Añadir a la cesta'} {selectedProduct.stock > 0 && <ArrowRight size={14} className="group-hover:translate-x-2 transition-transform" />}
@@ -296,10 +358,11 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
                    </button>
                  </div>
                </div>
-            </div>
+             </div>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
 
       {/* Shopping Cart Sidebar (Copied from main page to keep UX functional) */}
       {cartOpen && (
@@ -350,9 +413,14 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
                   <span className="text-[11px] uppercase tracking-widest text-charcoal/60">Subtotal</span>
                   <span className="font-serif text-2xl text-charcoal">${cartTotal}</span>
                 </div>
-                <NextLink href="/checkout" className="w-full bg-charcoal text-white py-5 text-[10px] tracking-[3px] uppercase hover:bg-rg transition-colors duration-300 flex justify-center items-center gap-3">
-                  Finalizar Compra <ArrowRight size={14} />
-                </NextLink>
+                <div className="mb-6">
+                  <NextLink 
+                    href="/checkout"
+                    className="w-full bg-charcoal text-white py-5 text-[10px] tracking-[3px] uppercase font-medium hover:bg-black transition-colors flex justify-center items-center"
+                  >
+                    Finalizar Compra
+                  </NextLink>
+                </div>
               </div>
             )}
           </div>
@@ -384,11 +452,11 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
                     <div className="flex-1 flex flex-col justify-center">
                       <h3 className="font-serif text-lg text-charcoal leading-snug">{item.name}</h3>
                       <p className="text-[9px] uppercase tracking-widest text-charcoal/50 mt-1 mb-2">{item.category}</p>
-                      <p className="text-sm text-charcoal">${item.price.toLocaleString()}</p>
+                      <p className="text-sm text-charcoal">${item.price.toLocaleString('es-ES')}</p>
                     </div>
                     <div className="flex flex-col gap-2">
                       <button 
-                        onClick={() => { handleAddToCart(item); toggleWishlist(item); setWishlistOpen(false); setCartOpen(true); }}
+                        onClick={() => { addToCart(item); toggleWishlist(item); setWishlistOpen(false); setCartOpen(true); }}
                         className="w-10 h-10 border border-charcoal/20 flex items-center justify-center hover:bg-charcoal hover:text-white transition-colors"
                         title="Mover al Carrito"
                       >

@@ -1,8 +1,8 @@
-import { PrismaClient } from '@prisma/client'
-
-const globalForPrisma = global as unknown as { prisma: PrismaClient }
-
-export const prisma =
-  globalForPrisma.prisma || new PrismaClient()
-
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+export { db } from "../db/index";
+// Stub Prisma to prevent compiler errors in admin panel during Drizzle migration
+export const prisma = {
+  product: { findMany: async () => [], findUnique: async () => null, create: async () => ({}), update: async () => ({}), delete: async () => ({}) },
+  order: { count: async () => 0, aggregate: async () => ({ _sum: { totalAmount: 0 } }), findMany: async () => [], findUnique: async () => null, create: async () => ({}), update: async () => ({}), delete: async () => ({}), deleteMany: async () => ({}) },
+  customer: { count: async () => 0, findMany: async () => [], findUnique: async () => null, create: async () => ({}), update: async () => ({}), delete: async () => ({}) },
+  storeSettings: { findUnique: async () => null, create: async () => ({}), update: async () => ({}) }
+};

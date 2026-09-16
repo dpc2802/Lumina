@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { ShoppingBag, X, CreditCard, Wallet, MessageCircle, Heart, ArrowRight, ChevronDown, Menu, CheckCircle, ShieldCheck, User } from "lucide-react";
 import NextLink from "next/link";
 import Image from "next/image";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { getProducts } from "@/app/actions";
 import Footer from "@/components/Footer";
 
@@ -18,6 +19,10 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
   const [payMethod, setPayMethod] = useState<'stripe'|'paypal'|'wa'>('stripe');
   const [toast, setToast] = useState("");
   const [scrolled, setScrolled] = useState(false);
+
+  const { scrollYProgress } = useScroll();
+  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
 
   useEffect(() => {
@@ -116,43 +121,61 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
       {/* Hero Section */}
       <header className="relative w-full min-h-screen flex flex-col justify-between items-center overflow-hidden pt-32 pb-8">
         {/* Background Image */}
-        <div className="absolute inset-0 z-0">
+        <motion.div style={{ y: heroY, scale: useTransform(scrollYProgress, [0, 1], [1, 1.1]) }} className="absolute inset-0 z-0 origin-center">
           <Image 
             src="/hero6.png" 
             alt="Lumina Jewelry Display" 
             fill 
-            className="object-cover object-center scale-105 animate-[kenburns_20s_ease-out_forwards]"
+            className="object-cover object-center scale-105"
             priority
           />
           {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black/90"></div>
-        </div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-[#0a0a0a]/95"></div>
+        </motion.div>
 
         {/* Top Spacer */}
         <div className="w-full"></div>
 
         {/* Hero Content */}
-        <div className="relative z-10 px-6 text-center max-w-4xl mx-auto flex flex-col items-center w-full">
-          <div className="animate-in slide-in-from-bottom-10 fade-in duration-1000 delay-300 flex flex-col items-center">
+        <motion.div 
+          style={{ opacity: heroOpacity }}
+          className="relative z-10 px-6 text-center max-w-4xl mx-auto flex flex-col items-center w-full"
+        >
+          <motion.div 
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+            className="flex flex-col items-center w-full"
+          >
             <div className="flex items-center justify-center gap-4 mb-6">
               <span className="w-12 h-[1px] bg-rg-lt/50"></span>
               <p className="text-[10px] md:text-xs tracking-[5px] uppercase text-rg-lt font-medium">La Colección 2026</p>
               <span className="w-12 h-[1px] bg-rg-lt/50"></span>
             </div>
             
-            <h1 className="font-serif text-6xl md:text-8xl lg:text-9xl text-white leading-[1.05] mb-6 font-light tracking-tight">
-              Elegancia<br/><em className="text-rg-lt">Atemporal</em>
+            <h1 className="font-serif text-5xl md:text-8xl lg:text-9xl text-white leading-[1.05] mb-6 font-light tracking-tight px-2">
+              Elegancia<br/>
+              <motion.em 
+                initial={{ opacity: 0, filter: "blur(10px)" }}
+                animate={{ opacity: 1, filter: "blur(0px)" }}
+                transition={{ duration: 1.5, delay: 0.8 }}
+                className="text-rg-lt inline-block"
+              >
+                Atemporal
+              </motion.em>
             </h1>
             
-            <p className="text-sm md:text-base text-white/80 leading-relaxed font-light mb-10 max-w-xl mx-auto tracking-wide">
+            <p className="text-sm md:text-base text-white/80 leading-relaxed font-light mb-10 max-w-xl mx-auto tracking-wide px-4">
               Descubre piezas elaboradas a mano con piedras de origen ético y oro puro. Joyas con significado, diseñadas para trascender generaciones.
             </p>
             
-            <NextLink href="/coleccion" className="bg-white text-charcoal px-10 py-4 text-[11px] tracking-[3px] uppercase font-bold hover:bg-rg hover:text-white transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.15)] flex items-center gap-3">
-              Explorar Colección <ArrowRight size={16} />
-            </NextLink>
-          </div>
-        </div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
+              <NextLink href="/coleccion" className="w-full sm:w-auto justify-center bg-white text-charcoal px-8 md:px-12 py-4 text-[11px] md:text-xs tracking-[3px] uppercase font-bold hover:bg-rg hover:text-white transition-all duration-300 shadow-[0_0_40px_rgba(255,255,255,0.15)] flex items-center gap-3 rounded-sm">
+                Explorar Colección <ArrowRight size={16} />
+              </NextLink>
+            </motion.div>
+          </motion.div>
+        </motion.div>
 
         {/* Scroll Indicator */}
         <div className="relative z-10 flex flex-col items-center gap-2 animate-pulse opacity-80 mt-12">
@@ -161,22 +184,37 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
         </div>
       </header>
 
-      {/* Social Proof Bar */}
-      <section className="bg-[#0a0a0a] py-10 border-t border-b border-white/5 relative z-10">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <p className="text-[9px] tracking-[5px] uppercase text-white/40 mb-6">Reconocidos Mundialmente Por</p>
-          <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-50 transition-opacity hover:opacity-100 duration-500">
-            <h3 className="font-serif text-xl tracking-widest text-white">VOGUE</h3>
-            <h3 className="font-sans font-bold text-lg tracking-[0.3em] text-white">GQ</h3>
-            <h3 className="font-serif italic text-2xl text-white">Vanity Fair</h3>
-            <h3 className="font-sans font-light text-xl tracking-widest text-white">ELLE</h3>
-          </div>
-        </div>
+      {/* Infinite Marquee Social Proof */}
+      <section className="bg-[#0a0a0a] py-12 border-b border-white/5 relative z-10 overflow-hidden flex items-center">
+        <div className="absolute left-0 w-24 h-full bg-gradient-to-r from-[#0a0a0a] to-transparent z-10"></div>
+        <div className="absolute right-0 w-24 h-full bg-gradient-to-l from-[#0a0a0a] to-transparent z-10"></div>
+        
+        <motion.div 
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ repeat: Infinity, ease: "linear", duration: 20 }}
+          className="flex whitespace-nowrap items-center w-max opacity-40 hover:opacity-100 transition-opacity duration-500"
+        >
+          {[...Array(2)].map((_, i) => (
+            <div key={i} className="flex items-center gap-16 md:gap-32 px-8 md:px-16">
+              <h3 className="font-serif text-2xl tracking-widest text-white">VOGUE</h3>
+              <div className="w-1.5 h-1.5 rounded-full bg-rg-lt"></div>
+              <h3 className="font-sans font-bold text-xl tracking-[0.3em] text-white">GQ</h3>
+              <div className="w-1.5 h-1.5 rounded-full bg-rg-lt"></div>
+              <h3 className="font-serif italic text-3xl text-white">Vanity Fair</h3>
+              <div className="w-1.5 h-1.5 rounded-full bg-rg-lt"></div>
+              <h3 className="font-sans font-light text-2xl tracking-widest text-white">ELLE</h3>
+              <div className="w-1.5 h-1.5 rounded-full bg-rg-lt"></div>
+            </div>
+          ))}
+        </motion.div>
       </section>
 
       {/* Editorial Collections Layout */}
-      <section id="collections" className="px-6 md:px-12 pt-32 pb-16 max-w-[1400px] mx-auto w-full relative">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-24 border-b border-charcoal/10 pb-12">
+      <section id="collections" className="px-6 md:px-12 pt-32 pb-16 max-w-[1400px] mx-auto w-full relative overflow-hidden">
+        <motion.div 
+          initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 1 }}
+          className="flex flex-col md:flex-row justify-between items-end mb-24 border-b border-charcoal/10 pb-12"
+        >
           <div className="max-w-xl">
             <span className="text-[9px] tracking-[4px] text-rg uppercase font-medium mb-6 block">El Arte Fino</span>
             <h2 className="font-serif text-5xl md:text-7xl text-charcoal font-light tracking-tight leading-[1.1]">
@@ -187,12 +225,15 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
           <p className="text-xs text-charcoal3 font-light max-w-sm leading-relaxed mt-8 md:mt-0">
             Descubre colecciones nacidas de la obsesión por el detalle. Cada pieza cuenta una historia de herencia, precisión y oro puro de 18 quilates.
           </p>
-        </div>
+        </motion.div>
 
         <div className="flex flex-col md:flex-row gap-16 lg:gap-24 items-start">
           {/* Left Large Editorial Portrait */}
-          <div className="w-full md:w-5/12 group cursor-pointer">
-            <div className="relative w-full h-[600px] lg:h-[800px] overflow-hidden mb-8">
+          <motion.div 
+            initial={{ opacity: 0, y: 100 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.2 }}
+            className="w-full md:w-5/12 group cursor-pointer"
+          >
+            <div className="relative w-full h-[400px] md:h-[600px] lg:h-[800px] overflow-hidden mb-8">
               <Image src="/cat_rings.png" alt="Alta Joyería" fill className="object-cover transition-transform duration-[2s] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-105" />
             </div>
             <div className="flex justify-between items-center">
@@ -204,13 +245,16 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
                 <ArrowRight size={16} strokeWidth={1} />
               </span>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Staggered Section */}
           <div className="w-full md:w-7/12 flex flex-col md:mt-40">
             
-            <div className="group cursor-pointer mb-24">
-              <div className="relative w-full h-[400px] lg:h-[500px] overflow-hidden mb-8">
+            <motion.div 
+              initial={{ opacity: 0, y: 100 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.4 }}
+              className="group cursor-pointer mb-24"
+            >
+              <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden mb-8">
                 <Image src="/chain.png" alt="Cadenas Fina" fill className="object-cover transition-transform duration-[2s] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-105" />
               </div>
               <div className="flex justify-between items-center">
@@ -222,10 +266,13 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
                   <ArrowRight size={16} strokeWidth={1} />
                 </span>
               </div>
-            </div>
+            </motion.div>
 
             {/* Typography / Custom Piece Block */}
-            <div className="w-full bg-pearl pt-16 relative">
+            <motion.div 
+              initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 1 }}
+              className="w-full bg-pearl pt-16 relative"
+            >
               <div className="absolute top-0 right-0 w-24 h-[1px] bg-rg"></div>
               <span className="text-[9px] tracking-[3px] text-charcoal3 uppercase mb-6 block">Servicio Bespoke</span>
               <h3 className="font-serif text-4xl lg:text-5xl text-charcoal mb-8 font-light leading-tight">
@@ -238,7 +285,7 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
                 Agendar Consulta Privada
                 <ArrowRight size={12} className="group-hover:translate-x-2 transition-transform" />
               </a>
-            </div>
+            </motion.div>
 
           </div>
         </div>
@@ -301,7 +348,7 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
                     <h3 className="font-serif text-xl text-charcoal mb-4 font-light leading-snug">{p.name}</h3>
                     <div className="flex-1"></div>
                     <div className="w-6 h-[1px] bg-charcoal/20 mx-auto mb-4"></div>
-                    <p className="font-serif text-lg font-light text-charcoal tracking-wide mb-2">${p.price.toLocaleString()}</p>
+                    <p className="font-serif text-lg font-light text-charcoal tracking-wide mb-2">${p.price.toLocaleString('es-ES')}</p>
                   </div>
 
                   {/* Add to Cart Footer */}
@@ -382,7 +429,7 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
                       <div className="flex-1 flex flex-col justify-center">
                         <h4 className="text-sm font-serif text-charcoal mb-2">{item.name}</h4>
                         <p className="text-[9px] tracking-widest uppercase text-charcoal3 mb-3">{item.category}</p>
-                        <p className="text-base font-serif font-medium text-rg">${item.price.toLocaleString()}</p>
+                        <p className="text-base font-serif font-medium text-rg">${item.price.toLocaleString('es-ES')}</p>
                       </div>
                       <button onClick={() => removeFromCart(item.cartId)} className="text-charcoal3 hover:text-red-500 self-start p-2 transition-colors">
                         <X size={16} />
@@ -397,7 +444,7 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
               <div className="p-8 border-t border-black/5 bg-white shadow-[0_-10px_40px_rgba(0,0,0,0.03)]">
                 <div className="flex justify-between items-center mb-8">
                   <span className="text-[10px] tracking-[2px] uppercase text-charcoal3 font-medium">Subtotal</span>
-                  <span className="font-serif text-3xl text-charcoal">${cartTotal.toLocaleString()}</span>
+                  <span className="font-serif text-3xl text-charcoal">${cartTotal.toLocaleString('es-ES')}</span>
                 </div>
                 
                 <div className="mb-6">
@@ -483,7 +530,7 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
                       <div className="flex-1">
                         <h3 className="font-serif text-lg mb-1">{item.name}</h3>
                         <p className="text-[10px] tracking-[2px] uppercase text-charcoal/50 mb-3">{item.category}</p>
-                        <p className="text-sm font-light">${item.price.toLocaleString()}</p>
+                        <p className="text-sm font-light">${item.price.toLocaleString('es-ES')}</p>
                       </div>
                       <div className="flex flex-col gap-3">
                         <button 

@@ -6,10 +6,55 @@ import path from "path";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
-export async function getProducts() {
-  return await prisma.product.findMany({
-    orderBy: { createdAt: 'asc' }
-  });
+import { db } from "@/db";
+import { products, productImages, categories, materials } from "@/db/schema";
+import { eq, and, inArray, sql } from "drizzle-orm";
+
+export async function getProducts(filters?: { category?: string, material?: string, status?: string }) {
+  const conditions = [];
+  
+  if (filters?.status) {
+    conditions.push(eq(products.status, filters.status));
+  } else {
+    conditions.push(eq(products.status, 'active'));
+  }
+
+  if (filters?.category) {
+    conditions.push(eq(categories.slug, filters.category));
+  }
+
+  if (filters?.material) {
+    conditions.push(eq(materials.slug, filters.material));
+  }
+
+  // Highly optimized query using leftJoin and strict selects to avoid N+1
+  const data = await db.select({
+    id: products.id,
+    name: products.name,
+    slug: products.slug,
+    description: products.description,
+    price: products.price,
+    oldPrice: products.oldPrice,
+    isFeatured: products.isFeatured,
+    stock: products.stock,
+    category: categories.name,
+    material: materials.name,
+    image: productImages.url
+  })
+  .from(products)
+  .leftJoin(categories, eq(products.categoryId, categories.id))
+  .leftJoin(materials, eq(products.materialId, materials.id))
+  .leftJoin(
+    productImages, 
+    and(
+      eq(productImages.productId, products.id), 
+      eq(productImages.isPrimary, true)
+    )
+  )
+  .where(and(...conditions))
+  .orderBy(products.createdAt);
+
+  return data;
 }
 
 export async function createOrder(cartItems: any[], customerInfo: any, totalAmount: number) {
