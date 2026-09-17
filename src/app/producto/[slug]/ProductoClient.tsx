@@ -61,32 +61,21 @@ export default function ProductoClient({ product }: { product: any }) {
         <div className="w-full lg:w-1/2 p-4 md:p-12 lg:p-16 lg:sticky lg:top-20 lg:h-[calc(100vh-80px)] flex items-center justify-center">
           <motion.div 
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}
-            className="w-full h-[45vh] md:h-full md:min-h-[60vh] relative bg-white border border-[#1A1A1A]/5 shadow-[0_10px_40px_rgba(0,0,0,0.02)] flex items-center justify-center p-2 md:p-8 group overflow-hidden"
+            className="w-full h-[50vh] md:h-full md:min-h-[60vh] relative bg-white border border-[#1A1A1A]/5 shadow-[0_10px_40px_rgba(0,0,0,0.02)] flex items-center justify-center p-6 md:p-12 group overflow-hidden"
           >
-            {/* Subtle dynamic background glow */}
-            <motion.div 
-              animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.2, 1] }} 
-              transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-              className="absolute w-3/4 h-3/4 bg-gradient-to-tr from-[#D4AF37]/5 to-transparent rounded-full blur-[50px] -z-10"
-            ></motion.div>
-
             {/* Subtle frame corners */}
-            <div className="absolute top-3 left-3 md:top-4 md:left-4 w-4 h-4 border-t border-l border-[#D4AF37]/40 transition-all duration-700 group-hover:w-8 group-hover:h-8"></div>
-            <div className="absolute bottom-3 right-3 md:bottom-4 md:right-4 w-4 h-4 border-b border-r border-[#D4AF37]/40 transition-all duration-700 group-hover:w-8 group-hover:h-8"></div>
+            <div className="absolute top-4 left-4 md:top-6 md:left-6 w-4 h-4 border-t border-l border-[#D4AF37]/40 transition-all duration-700 group-hover:w-8 group-hover:h-8"></div>
+            <div className="absolute bottom-4 right-4 md:bottom-6 md:right-6 w-4 h-4 border-b border-r border-[#D4AF37]/40 transition-all duration-700 group-hover:w-8 group-hover:h-8"></div>
             
-            <motion.div 
-              animate={{ y: [0, -8, 0] }} 
-              transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-              className="relative w-full h-full max-w-[280px] sm:max-w-md md:max-w-lg aspect-square"
-            >
+            <div className="relative w-full h-full">
               <Image 
                 src={product.image} 
                 alt={product.name} 
                 fill 
-                className="object-contain mix-blend-multiply drop-shadow-2xl transition-transform duration-[2s] group-hover:scale-110" 
+                className="object-contain mix-blend-multiply drop-shadow-xl transition-transform duration-[2s] group-hover:scale-[1.03]" 
                 priority 
               />
-            </motion.div>
+            </div>
           </motion.div>
         </div>
 
