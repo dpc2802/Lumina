@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { ShoppingBag, X, Heart, ArrowRight, SlidersHorizontal, ChevronDown, Grid2X2, List, Maximize2 } from "lucide-react";
-import NextLink from "next/link";
+import { Link as NextLink } from "next-view-transitions";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
@@ -12,6 +12,7 @@ import { useCart } from "@/components/CartContext";
 import { toast } from "sonner";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import ShareCartButton from "@/components/ShareCartButton";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Catalog({ initialProducts }: { initialProducts: any[] }) {
   const [products, setProducts] = useState<any[]>(initialProducts);
@@ -92,6 +93,7 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
         </NextLink>
 
         <div className="flex-1 flex justify-end items-center gap-6">
+          <ThemeToggle />
           <button className="relative hover:text-rg transition-colors" onClick={() => setWishlistOpen(true)}>
             <Heart strokeWidth={1.5} size={20} />
             {wishlistItems.length > 0 && (

@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import NextLink from "next/link";
-import { ArrowLeft, Heart, ShoppingBag, ShieldCheck, Truck, RotateCcw, ChevronDown, ChevronUp, Gem, Palette } from "lucide-react";
+import { Link as NextLink } from "next-view-transitions";
+import { ArrowLeft, Heart, ShoppingBag, ShieldCheck, Truck, RotateCcw, ChevronDown, ChevronUp, Gem } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/components/CartContext";
 import Footer from "@/components/Footer";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function ProductoClient({ product }: { product: any }) {
   const { addToCart } = useCart();
@@ -48,7 +49,8 @@ export default function ProductoClient({ product }: { product: any }) {
         <NextLink href="/" className="font-serif text-2xl tracking-[0.25em] uppercase text-center flex-1 shrink-0">
           Lumina
         </NextLink>
-        <div className="flex-1 flex justify-end gap-6">
+        <div className="flex-1 flex justify-end gap-6 items-center">
+          <ThemeToggle />
           <button onClick={() => toggleWishlist(product)} className="hover:text-[#D4AF37] transition-colors">
             <Heart size={20} className={isWishlisted ? "fill-[#D4AF37] text-[#D4AF37]" : "text-[#1A1A1A]"} strokeWidth={1} />
           </button>
