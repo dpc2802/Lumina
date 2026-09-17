@@ -10,6 +10,7 @@ import { getProducts } from "@/app/actions";
 import Footer from "@/components/Footer";
 import { useCart } from "@/components/CartContext";
 import { toast } from "sonner";
+import AnnouncementBar from "@/components/AnnouncementBar";
 
 export default function Catalog({ initialProducts }: { initialProducts: any[] }) {
   const [products, setProducts] = useState<any[]>(initialProducts);
@@ -69,10 +70,11 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
 
   return (
     <div className="min-h-screen flex flex-col bg-pearl font-sans">
-      {/* Floating Glassmorphism Navigation (Dynamic Text for Dark Hero) */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-500 px-6 md:px-12 flex items-center justify-between ${scrolled ? 'bg-white/90 backdrop-blur-xl shadow-sm h-20 text-charcoal' : 'bg-transparent h-28 text-white'}`}>
-        <div className="flex-1 flex justify-start">
-          <div className="hidden md:flex gap-12 text-[11px] tracking-[2.5px] uppercase font-medium">
+      <div className="fixed top-0 w-full z-50">
+        <AnnouncementBar />
+        <nav className={`w-full transition-all duration-500 px-6 md:px-12 flex items-center justify-between ${scrolled ? 'bg-white/90 backdrop-blur-xl shadow-sm h-20 text-charcoal' : 'bg-transparent h-28 text-white'}`}>
+          <div className="flex-1 flex justify-start">
+            <div className="hidden md:flex gap-12 text-[11px] tracking-[2.5px] uppercase font-medium">
             <NextLink href="/" className="hover:text-rg transition-colors relative group">
               Inicio
               <span className="absolute -bottom-2 left-0 w-0 h-[1px] bg-rg transition-all group-hover:w-full"></span>
@@ -107,6 +109,7 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
           </button>
         </div>
       </nav>
+      </div>
 
       {/* Cinematic Catalog Hero */}
       <header className="relative pt-40 pb-24 px-6 md:px-12 w-full min-h-[50vh] flex flex-col items-center justify-center text-center overflow-hidden bg-charcoal">

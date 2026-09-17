@@ -32,3 +32,12 @@ body {
 .animate-page-enter {
   animation: page-enter 1s ease-in-out;
 }
+
+@keyframes ticker {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+@theme inline {
+  --animate-ticker: ticker 40s linear infinite;
+}

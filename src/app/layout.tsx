@@ -14,6 +14,8 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-playfair",
 });
+import SmoothScroll from "@/components/SmoothScroll";
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 
 export const metadata: Metadata = {
   title: "Lumina Jewelry",
@@ -28,9 +30,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-[#FAFAFA] text-[#1A1A1A] font-sans">
-        <CartProvider>
-          {children}
-          <CookieBanner />
+        <SmoothScroll>
+          <CartProvider>
+            {children}
+            <FloatingWhatsApp />
+            <CookieBanner />
           <Toaster position="bottom-right" toastOptions={{
             style: {
               background: '#111',
@@ -40,7 +44,8 @@ export default function RootLayout({
               fontSize: '12px'
             }
           }} />
-        </CartProvider>
+          </CartProvider>
+        </SmoothScroll>
       </body>
     </html>
   );
