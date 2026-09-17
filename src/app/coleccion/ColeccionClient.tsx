@@ -342,6 +342,10 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
                  
                  <div className="flex-1"></div>
                  
+                 <NextLink href={`/producto/${selectedProduct.slug}`} className="w-full py-4 text-center text-[10px] tracking-[3px] uppercase text-charcoal border border-charcoal/20 hover:border-charcoal transition-colors mb-4 block">
+                   Ver Detalles Completos
+                 </NextLink>
+
                  <div className="flex gap-4">
                    <button 
                       disabled={selectedProduct.stock === 0}

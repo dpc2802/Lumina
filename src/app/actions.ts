@@ -58,6 +58,36 @@ export async function getProducts(filters?: { category?: string, material?: stri
   return data;
 }
 
+export async function getProductBySlug(slug: string) {
+  const data = await db.select({
+    id: products.id,
+    name: products.name,
+    slug: products.slug,
+    description: products.description,
+    price: products.price,
+    oldPrice: products.oldPrice,
+    isFeatured: products.isFeatured,
+    stock: products.stock,
+    category: categories.name,
+    material: materials.name,
+    image: productImages.url
+  })
+  .from(products)
+  .leftJoin(categories, eq(products.categoryId, categories.id))
+  .leftJoin(materials, eq(products.materialId, materials.id))
+  .leftJoin(
+    productImages, 
+    and(
+      eq(productImages.productId, products.id), 
+      eq(productImages.isPrimary, true)
+    )
+  )
+  .where(eq(products.slug, slug))
+  .limit(1);
+
+  return data[0] || null;
+}
+
 export async function createOrder(cartItems: any[], customerInfo: any, totalAmount: number) {
   // Try to find customer by email
   let customer = await prisma.customer.findUnique({

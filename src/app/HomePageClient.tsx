@@ -347,6 +347,11 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
                     <p className="text-[9px] tracking-[3px] uppercase text-rg mb-3">{p.material}</p>
                     <h3 className="font-serif text-xl text-charcoal mb-4 font-light leading-snug">{p.name}</h3>
                     <div className="flex-1"></div>
+                  
+                    <NextLink href={`/producto/${p.slug}`} className="w-full py-4 text-center text-[10px] tracking-[3px] uppercase text-charcoal border border-charcoal/20 hover:border-charcoal transition-colors mb-4 block">
+                      Ver Detalles Completos
+                    </NextLink>
+
                     <div className="w-6 h-[1px] bg-charcoal/20 mx-auto mb-4"></div>
                     <p className="font-serif text-lg font-light text-charcoal tracking-wide mb-2">${p.price.toLocaleString('es-ES')}</p>
                   </div>
