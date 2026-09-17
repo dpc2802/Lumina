@@ -71,10 +71,10 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-pearl font-sans">
+    <div className="min-h-screen flex flex-col bg-pearl dark:bg-[#050505] text-charcoal dark:text-[#F3F1EE] font-sans selection:bg-rg selection:text-white transition-colors duration-700">
       <div className="fixed top-0 w-full z-50">
         <AnnouncementBar />
-        <nav className={`w-full transition-all duration-500 px-6 md:px-12 flex items-center justify-between ${scrolled ? 'bg-white/90 backdrop-blur-xl shadow-sm h-20 text-charcoal' : 'bg-transparent h-28 text-white'}`}>
+        <nav className={`w-full transition-all duration-500 px-6 md:px-12 flex items-center justify-between ${scrolled ? 'bg-white/90 dark:bg-[#050505]/90 backdrop-blur-xl shadow-sm h-20 text-charcoal dark:text-[#F3F1EE]' : 'bg-transparent h-28 text-white'}`}>
           <div className="flex-1 flex justify-start">
             <div className="hidden md:flex gap-12 text-[11px] tracking-[2.5px] uppercase font-medium">
             <NextLink href="/" className="hover:text-rg transition-colors relative group">

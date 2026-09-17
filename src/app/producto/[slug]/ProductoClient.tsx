@@ -39,7 +39,7 @@ export default function ProductoClient({ product }: { product: any }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#FCFBF8] font-sans text-[#1A1A1A] flex flex-col selection:bg-[#D4AF37] selection:text-white">
+    <div className="min-h-screen bg-[#FCFBF8] dark:bg-[#050505] font-sans text-[#1A1A1A] dark:text-[#F3F1EE] flex flex-col selection:bg-[#D4AF37] selection:text-white transition-colors duration-700">
       
       {/* Elegant Navigation */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-500 h-20 flex items-center px-6 md:px-12 ${scrolled ? 'bg-[#FCFBF8]/95 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.03)] border-b border-[#1A1A1A]/5' : 'bg-transparent'}`}>
