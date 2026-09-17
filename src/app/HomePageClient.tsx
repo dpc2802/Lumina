@@ -588,53 +588,132 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
         </div>
       )}
 
-      {/* Quick View Modal */}
+      {/* Quick View Modal - Top Tier Editorial Edition */}
+      <AnimatePresence>
       {quickViewProduct && (
-        <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 sm:p-6">
-          <div className="absolute inset-0 bg-black/80 backdrop-blur-md transition-opacity" onClick={() => setQuickViewProduct(null)}></div>
-          <div className="bg-white w-full max-w-5xl max-h-[90vh] overflow-y-auto relative z-10 flex flex-col md:flex-row shadow-2xl">
-            <button onClick={() => setQuickViewProduct(null)} className="absolute top-4 right-4 z-20 bg-white/80 backdrop-blur-sm p-2 rounded-full text-charcoal hover:bg-charcoal hover:text-white transition-all shadow-sm">
-              <X size={20} strokeWidth={1.5} />
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-12">
+          {/* Blur Backdrop */}
+          <motion.div 
+            initial={{ opacity: 0, backdropFilter: "blur(0px)" }} 
+            animate={{ opacity: 1, backdropFilter: "blur(12px)" }} 
+            exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            className="absolute inset-0 bg-[#1A1A1A]/60" 
+            onClick={() => setQuickViewProduct(null)}
+          ></motion.div>
+          
+          {/* Modal Content */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.98, y: 20 }} 
+            animate={{ opacity: 1, scale: 1, y: 0 }} 
+            exit={{ opacity: 0, scale: 0.98, y: 20 }} 
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="relative w-full max-w-6xl bg-white max-h-[90vh] flex flex-col md:flex-row shadow-[0_40px_100px_rgba(0,0,0,0.5)] overflow-hidden"
+          >
+            {/* Close Button */}
+            <button 
+              onClick={() => setQuickViewProduct(null)} 
+              className="absolute top-6 right-6 z-30 p-3 text-[#1A1A1A] hover:text-[#D4AF37] transition-all bg-white/90 backdrop-blur-md rounded-full hover:rotate-90 duration-500 shadow-sm"
+            >
+               <X size={20} strokeWidth={1} />
             </button>
-            <div className="w-full md:w-1/2 bg-[#fafafa] relative min-h-[300px] md:min-h-[500px] flex items-center justify-center p-8">
-               <Image src={quickViewProduct.image} alt={quickViewProduct.name} fill className="object-cover mix-blend-multiply opacity-90" />
-            </div>
-            <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="text-[9px] tracking-[3px] uppercase text-rg">{quickViewProduct.category}</span>
-                {quickViewProduct.badge && <span className="bg-charcoal text-white text-[8px] tracking-[2px] uppercase px-2 py-0.5">{quickViewProduct.badge}</span>}
-              </div>
-              <h2 className="font-serif text-3xl md:text-4xl text-charcoal mb-4 font-light leading-snug">{quickViewProduct.name}</h2>
-              <p className="text-xl font-serif text-charcoal mb-6">${quickViewProduct.price.toLocaleString()}</p>
-              <div className="w-12 h-[1px] bg-rg mb-6"></div>
-              <p className="text-sm font-light text-charcoal/70 mb-8 leading-relaxed">
-                {quickViewProduct.description}
-              </p>
-              <ul className="space-y-3 mb-10 border-t border-charcoal/10 pt-8">
-                {(quickViewProduct.details || [
-                  `Metal base: ${quickViewProduct.material}`,
-                  "Forjado por maestros orfebres",
-                  "Certificado de Autenticidad",
-                  "Garantía de por vida"
-                ]).map((detail: string, i: number) => (
-                  <li key={i} className="flex items-start gap-3 text-xs text-charcoal/60 font-light">
-                    <span className="w-1 h-1 rounded-full bg-rg mt-1.5 shrink-0"></span>
-                    {detail}
-                  </li>
-                ))}
-              </ul>
-              <div className="grid grid-cols-2 gap-4 mt-auto">
-                 <button 
-                   onClick={() => { addToCart(quickViewProduct); setQuickViewProduct(null); }}
-                   className="col-span-2 bg-charcoal text-white py-4 text-[10px] tracking-[3px] uppercase hover:bg-rg transition-colors flex items-center justify-center gap-2"
-                 >
-                   <ShoppingBag size={14} /> Añadir a la Cesta
-                 </button>
+            
+            {/* Left: Product Showcase (Museum Display Style) */}
+            <div className="w-full md:w-1/2 relative min-h-[40vh] md:min-h-[700px] bg-[#FAFAFA] flex items-center justify-center p-12 overflow-hidden group">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.2 }}
+                className="relative w-full h-full aspect-[4/5] flex items-center justify-center transition-transform duration-[2s] ease-out group-hover:scale-110"
+              >
+                 <Image 
+                   src={quickViewProduct.image} 
+                   alt={quickViewProduct.name} 
+                   fill 
+                   className="object-contain mix-blend-multiply drop-shadow-2xl p-8" 
+                 />
+              </motion.div>
+              
+              {/* Subtle Branding Watermark */}
+              <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none">
+                 <span className="font-serif text-[150px] md:text-[200px] text-[#1A1A1A] tracking-widest uppercase -rotate-90 md:rotate-0 whitespace-nowrap">Lumina</span>
               </div>
             </div>
+            
+            {/* Right: Editorial Information Panel */}
+            <div className="w-full md:w-1/2 bg-white relative overflow-y-auto scrollbar-hide flex flex-col">
+               <div className="p-8 md:p-12 lg:p-16 flex-1 flex flex-col">
+                 
+                 <motion.div initial="hidden" animate="visible" variants={{
+                   hidden: { opacity: 0 },
+                   visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.3 } }
+                 }}>
+                   
+                   <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8 } } }}>
+                     <span className="text-[10px] tracking-[5px] uppercase text-[#1A1A1A]/40 mb-4 block">
+                       {quickViewProduct.category}
+                     </span>
+                     <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-[#1A1A1A] font-light mb-4 tracking-tight leading-[1.1]">
+                       {quickViewProduct.name}
+                     </h2>
+                   </motion.div>
+
+                   <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8 } } }} className="flex items-center gap-6 mb-10">
+                     <p className="font-serif text-3xl text-[#D4AF37] italic">${Number(quickViewProduct.price).toLocaleString('es-ES')}</p>
+                     <div className="h-4 w-[1px] bg-[#1A1A1A]/20"></div>
+                     <span className="text-[#1A1A1A]/60 text-[10px] tracking-[3px] uppercase">
+                       {quickViewProduct.material}
+                     </span>
+                   </motion.div>
+                   
+                   <motion.div variants={{ hidden: { opacity: 0, scaleX: 0 }, visible: { opacity: 1, scaleX: 1, transition: { duration: 1 } } }} className="w-12 h-[1px] bg-[#1A1A1A]/20 mb-8 origin-left"></motion.div>
+                   
+                   <motion.p variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8 } } }} className="text-[13px] text-[#1A1A1A]/60 font-light leading-[1.8] mb-12 max-w-md">
+                     {quickViewProduct.description}
+                   </motion.p>
+                   
+                   <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8 } } }} className="space-y-4 mb-12">
+                     <span className="text-[9px] tracking-[3px] uppercase text-[#1A1A1A] font-medium block mb-6">Especificaciones</span>
+                     {(quickViewProduct.details && quickViewProduct.details.length > 0 ? quickViewProduct.details : ['Metal de máxima pureza', 'Certificación Lumina Care', 'Ajuste de precisión']).map((detail: string, i: number) => (
+                       <div key={i} className="flex items-center gap-4 border-b border-[#1A1A1A]/5 pb-3">
+                         <div className="w-1.5 h-1.5 border border-[#D4AF37] rotate-45 shrink-0"></div> 
+                         <span className="text-[11px] tracking-wide text-[#1A1A1A]/70 font-light">{detail}</span>
+                       </div>
+                     ))}
+                   </motion.div>
+
+                 </motion.div>
+
+               </div>
+
+               {/* Sticky Action Footer */}
+               <motion.div 
+                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.8 }}
+                 className="p-8 md:px-12 md:py-8 bg-[#FCFBF8] border-t border-[#1A1A1A]/5 mt-auto"
+               >
+                 <div className="flex gap-4">
+                   <button 
+                      disabled={quickViewProduct.stock === 0}
+                      onClick={() => { addToCart(quickViewProduct); setQuickViewProduct(null); setCartOpen(true); }}
+                      className={`flex-1 text-white py-5 text-[10px] tracking-[4px] uppercase transition-all duration-500 flex justify-center items-center gap-4 group ${quickViewProduct.stock === 0 ? 'bg-[#1A1A1A]/30 cursor-not-allowed' : 'bg-[#1A1A1A] hover:bg-[#D4AF37]'}`}
+                    >
+                      {quickViewProduct.stock === 0 ? 'Agotado' : 'Añadir a la cesta'}
+                   </button>
+                   <button 
+                      onClick={() => toggleWishlist(quickViewProduct)}
+                      className="w-16 flex items-center justify-center border border-[#1A1A1A]/10 hover:border-[#D4AF37] hover:text-[#D4AF37] bg-white transition-colors"
+                   >
+                      <Heart size={18} className={wishlistItems.find((item:any) => item.id === quickViewProduct.id) ? "text-[#D4AF37] fill-[#D4AF37]" : "text-[#1A1A1A]/50"} strokeWidth={1} />
+                   </button>
+                 </div>
+                 
+                 <NextLink href={`/producto/${quickViewProduct.slug}`} className="w-full text-center text-[10px] tracking-[3px] uppercase text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors mt-6 block">
+                   Ver Página Completa del Producto →
+                 </NextLink>
+               </motion.div>
+
+             </div>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </div>
   );
 }
