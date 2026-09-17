@@ -611,7 +611,12 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
                 {quickViewProduct.description}
               </p>
               <ul className="space-y-3 mb-10 border-t border-charcoal/10 pt-8">
-                {quickViewProduct.details.map((detail: string, i: number) => (
+                {(quickViewProduct.details || [
+                  `Metal base: ${quickViewProduct.material}`,
+                  "Forjado por maestros orfebres",
+                  "Certificado de Autenticidad",
+                  "Garantía de por vida"
+                ]).map((detail: string, i: number) => (
                   <li key={i} className="flex items-start gap-3 text-xs text-charcoal/60 font-light">
                     <span className="w-1 h-1 rounded-full bg-rg mt-1.5 shrink-0"></span>
                     {detail}
