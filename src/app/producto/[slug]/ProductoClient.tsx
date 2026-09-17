@@ -1,23 +1,34 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import NextLink from "next/link";
-import { ArrowLeft, Heart, ShoppingBag, ChevronDown, ChevronUp, ShieldCheck, Truck, RotateCcw, Gem, Award } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, Heart, ShoppingBag, ShieldCheck, Truck, RotateCcw, Diamond, Droplet, Star, ArrowDown } from "lucide-react";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { useCart } from "@/components/CartContext";
 import Footer from "@/components/Footer";
 
 export default function ProductoClient({ product }: { product: any }) {
   const { addToCart } = useCart();
   const [wishlistItems, setWishlistItems] = useState<any[]>([]);
-  const [activeAccordion, setActiveAccordion] = useState<string | null>("description");
   const [scrolled, setScrolled] = useState(false);
+  const [showStickyCart, setShowStickyCart] = useState(false);
+  const heroRef = useRef<HTMLDivElement>(null);
   
+  const { scrollYProgress } = useScroll();
+  const yImage = useTransform(scrollYProgress, [0, 1], [0, 300]);
+  const opacityImage = useTransform(scrollYProgress, [0, 0.5], [1, 0.3]);
+  const scaleImage = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
+
   const isWishlisted = wishlistItems.some(item => item.id === product.id);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+      if (heroRef.current) {
+        setShowStickyCart(window.scrollY > heroRef.current.offsetHeight);
+      }
+    };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -30,223 +41,216 @@ export default function ProductoClient({ product }: { product: any }) {
     }
   };
 
-  const toggleAccordion = (id: string) => {
-    if (activeAccordion === id) setActiveAccordion(null);
-    else setActiveAccordion(id);
-  };
-
   return (
-    <div className="min-h-screen bg-pearl font-sans text-charcoal flex flex-col selection:bg-[#C5A059] selection:text-white">
-      {/* Navigation */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-700 h-24 flex items-center px-6 md:px-12 ${scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-transparent'}`}>
-        <NextLink href="/coleccion" className="flex items-center gap-3 text-[10px] tracking-[3px] uppercase hover:text-[#C5A059] transition-colors flex-1 font-medium">
-          <ArrowLeft size={14} /> Colección
+    <div className="min-h-screen bg-[#FDFCFB] font-sans text-charcoal flex flex-col selection:bg-[#C5A059] selection:text-white">
+      
+      {/* Editorial Navigation */}
+      <nav className={`fixed top-0 w-full z-[100] transition-all duration-1000 h-24 flex items-center px-6 md:px-16 ${scrolled ? 'bg-white/80 backdrop-blur-xl border-b border-charcoal/5 shadow-sm' : 'bg-transparent'}`}>
+        <NextLink href="/coleccion" className="flex items-center gap-3 text-[10px] tracking-[4px] uppercase hover:text-[#C5A059] transition-colors flex-1 font-medium group">
+          <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-2" /> 
+          <span className="hidden md:inline">El Catálogo</span>
         </NextLink>
-        <NextLink href="/" className="font-serif text-2xl tracking-[0.3em] uppercase text-center flex-1">
+        <NextLink href="/" className="font-serif text-2xl md:text-3xl tracking-[0.3em] uppercase text-center flex-1">
           Lumina
         </NextLink>
         <div className="flex-1 flex justify-end gap-6">
-          <button onClick={() => toggleWishlist(product)} className="hover:text-[#C5A059] transition-colors group">
-            <Heart size={18} className={`transition-colors ${isWishlisted ? "fill-[#C5A059] text-[#C5A059]" : "text-charcoal group-hover:text-[#C5A059]"}`} strokeWidth={1.5} />
+          <button onClick={() => toggleWishlist(product)} className="w-10 h-10 rounded-full border border-charcoal/10 flex items-center justify-center hover:border-[#C5A059] hover:bg-[#C5A059]/5 transition-all group">
+            <Heart size={16} className={`transition-colors ${isWishlisted ? "fill-[#C5A059] text-[#C5A059]" : "text-charcoal group-hover:text-[#C5A059]"}`} strokeWidth={1.5} />
           </button>
         </div>
       </nav>
 
-      {/* Main PDP Layout - Split Screen on Desktop */}
-      <main className="flex-1 pt-24 flex flex-col lg:flex-row relative">
-        
-        {/* Left Side: Sticky Image Gallery */}
-        <div className="w-full lg:w-[55%] lg:h-[calc(100vh-96px)] lg:sticky lg:top-24 bg-[#F5F4F0] relative overflow-hidden flex items-center justify-center p-8 md:p-16 border-r border-charcoal/5">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-            className="relative w-full h-[60vh] lg:h-full max-w-3xl group"
-          >
-            <Image src={product.image} alt={product.name} fill className="object-contain mix-blend-multiply drop-shadow-2xl transition-transform duration-1000 group-hover:scale-110" priority />
-          </motion.div>
-          
-          {/* Subtle Decorative Accents (Alta Realeza) */}
-          <div className="absolute top-12 left-12 w-8 h-8 border-t border-l border-[#C5A059]/40"></div>
-          <div className="absolute bottom-12 right-12 w-8 h-8 border-b border-r border-[#C5A059]/40"></div>
-          <div className="absolute top-1/2 left-8 -translate-y-1/2 text-[9px] tracking-[6px] uppercase text-charcoal/20 -rotate-90 origin-left whitespace-nowrap">
-            Lumina Haute Joaillerie
-          </div>
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[9px] tracking-[4px] uppercase text-[#C5A059]/60">
-            Pieza de Colección
-          </div>
-        </div>
+      {/* Hero Section - Magazine Cover Style */}
+      <section ref={heroRef} className="relative w-full h-[100vh] flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-[#F5F4F0] to-[#FDFCFB]">
+        {/* Massive Background Typography */}
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 0.03, scale: 1 }} transition={{ duration: 2 }}
+          className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none"
+        >
+          <h1 className="font-serif text-[15vw] leading-none whitespace-nowrap text-charcoal">HAUTE JOAILLERIE</h1>
+        </motion.div>
 
-        {/* Right Side: Product Details & Storytelling */}
-        <div className="w-full lg:w-[45%] bg-white px-8 py-16 md:px-20 lg:py-24 flex flex-col justify-start min-h-[calc(100vh-96px)]">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 h-full flex flex-col justify-center items-center mt-12">
           
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }} className="max-w-xl mx-auto w-full">
-            
-            {/* Breadcrumbs & Category */}
-            <div className="flex items-center gap-3 text-[9px] tracking-[4px] uppercase text-charcoal/40 mb-8">
-              <NextLink href="/" className="hover:text-[#C5A059] transition-colors">Inicio</NextLink>
-              <span className="text-charcoal/20">•</span>
-              <NextLink href="/coleccion" className="hover:text-[#C5A059] transition-colors">Colección</NextLink>
-              <span className="text-charcoal/20">•</span>
-              <span className="text-[#C5A059]">{product.category}</span>
-            </div>
-
-            {/* Title & Price */}
-            <h1 className="font-serif text-5xl md:text-6xl text-charcoal mb-6 font-light leading-[1.1] tracking-tight">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.2 }} className="text-center mb-8 z-20">
+            <span className="text-[10px] tracking-[6px] uppercase text-[#C5A059] font-medium block mb-4">Pieza Exclusiva • {product.category}</span>
+            <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl text-charcoal font-light leading-[1.1] tracking-tighter">
               {product.name}
             </h1>
-            
-            <div className="flex items-end gap-5 mb-12">
-              <p className="font-serif text-3xl text-charcoal tracking-wide">
-                ${Number(product.price).toLocaleString('es-ES')}
-              </p>
-              {product.oldPrice && (
-                <p className="font-serif text-xl text-charcoal/30 line-through mb-1">
-                  ${Number(product.oldPrice).toLocaleString('es-ES')}
-                </p>
-              )}
-            </div>
-
-            <div className="w-16 h-[1px] bg-[#C5A059] mb-12"></div>
-
-            {/* Badges / Value Props - Ultra Premium */}
-            <div className="grid grid-cols-2 gap-6 mb-16">
-              <div className="flex flex-col gap-3">
-                <ShieldCheck size={20} className="text-[#C5A059]" strokeWidth={1} />
-                <span className="text-[10px] tracking-[2px] uppercase text-charcoal/60 leading-relaxed">Certificado <br/> de Autenticidad</span>
-              </div>
-              <div className="flex flex-col gap-3">
-                <Gem size={20} className="text-[#C5A059]" strokeWidth={1} />
-                <span className="text-[10px] tracking-[2px] uppercase text-charcoal/60 leading-relaxed">Diamantes <br/> Éticos (GIA)</span>
-              </div>
-            </div>
-
-            {/* Add to Cart Sticky / Normal Button */}
-            <div className="mb-20 sticky bottom-8 z-40 lg:static">
-              <button 
-                onClick={() => addToCart(product)}
-                disabled={product.stock === 0}
-                className={`w-full py-5 flex items-center justify-center gap-4 text-[11px] tracking-[5px] uppercase transition-all duration-700 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] lg:shadow-none hover:shadow-[0_20px_40px_-15px_rgba(197,160,89,0.3)] ${product.stock === 0 ? 'bg-[#F5F4F0] text-charcoal/40 cursor-not-allowed border border-charcoal/10' : 'bg-charcoal text-white hover:bg-[#C5A059]'}`}
-              >
-                {product.stock === 0 ? 'Agotado Temporalmente' : 'Añadir a la Colección'} 
-              </button>
-              
-              {product.stock > 0 && product.stock <= 3 && (
-                <p className="text-center text-[10px] tracking-widest text-[#C5A059] uppercase mt-4">
-                  Solo {product.stock} piezas disponibles a nivel mundial
-                </p>
-              )}
-            </div>
-
-            {/* Accordions for Details */}
-            <div className="border-t border-charcoal/10">
-              
-              {/* Accordion 1: Description */}
-              <div className="border-b border-charcoal/10">
-                <button 
-                  onClick={() => toggleAccordion('description')}
-                  className="w-full py-7 flex items-center justify-between text-left group"
-                >
-                  <span className={`text-[10px] tracking-[4px] uppercase transition-colors ${activeAccordion === 'description' ? 'text-[#C5A059] font-medium' : 'text-charcoal group-hover:text-[#C5A059]'}`}>La Obra</span>
-                  {activeAccordion === 'description' ? <ChevronUp size={16} className="text-[#C5A059]" /> : <ChevronDown size={16} className="text-charcoal/30" />}
-                </button>
-                <AnimatePresence>
-                  {activeAccordion === 'description' && (
-                    <motion.div 
-                      initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
-                      className="overflow-hidden"
-                    >
-                      <p className="pb-8 text-charcoal/60 font-light leading-relaxed text-sm md:text-base">
-                        {product.description || "Una pieza concebida bajo los más estrictos estándares de la alta joyería. Su diseño arquitectónico refleja una búsqueda incesante por la perfección estética, convirtiéndose en un tributo tangible al arte moderno y la herencia orfebre."}
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Accordion 2: Materials */}
-              <div className="border-b border-charcoal/10">
-                <button 
-                  onClick={() => toggleAccordion('materials')}
-                  className="w-full py-7 flex items-center justify-between text-left group"
-                >
-                  <span className={`text-[10px] tracking-[4px] uppercase transition-colors ${activeAccordion === 'materials' ? 'text-[#C5A059] font-medium' : 'text-charcoal group-hover:text-[#C5A059]'}`}>Artesanía y Materiales</span>
-                  {activeAccordion === 'materials' ? <ChevronUp size={16} className="text-[#C5A059]" /> : <ChevronDown size={16} className="text-charcoal/30" />}
-                </button>
-                <AnimatePresence>
-                  {activeAccordion === 'materials' && (
-                    <motion.div 
-                      initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
-                      className="overflow-hidden"
-                    >
-                      <ul className="pb-8 space-y-4">
-                        <li className="flex items-start gap-4">
-                          <div className="w-1.5 h-1.5 bg-[#C5A059] rotate-45 shrink-0 mt-1.5"></div>
-                          <p className="text-sm text-charcoal/60 font-light leading-relaxed"><strong className="text-charcoal font-normal">Metal:</strong> {product.material} forjado en cámaras de presión controlada.</p>
-                        </li>
-                        <li className="flex items-start gap-4">
-                          <div className="w-1.5 h-1.5 bg-[#C5A059] rotate-45 shrink-0 mt-1.5"></div>
-                          <p className="text-sm text-charcoal/60 font-light leading-relaxed"><strong className="text-charcoal font-normal">Engaste:</strong> Cada gema es ajustada a mano bajo microscopio por nuestros maestros artesanos (Hand-set).</p>
-                        </li>
-                        <li className="flex items-start gap-4">
-                          <div className="w-1.5 h-1.5 bg-[#C5A059] rotate-45 shrink-0 mt-1.5"></div>
-                          <p className="text-sm text-charcoal/60 font-light leading-relaxed"><strong className="text-charcoal font-normal">Garantía:</strong> Cobertura vitalicia (Lumina Care) que incluye limpieza, pulido y revisión de engastes anual.</p>
-                        </li>
-                      </ul>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Accordion 3: Delivery */}
-              <div className="border-b border-charcoal/10">
-                <button 
-                  onClick={() => toggleAccordion('delivery')}
-                  className="w-full py-7 flex items-center justify-between text-left group"
-                >
-                  <span className={`text-[10px] tracking-[4px] uppercase transition-colors ${activeAccordion === 'delivery' ? 'text-[#C5A059] font-medium' : 'text-charcoal group-hover:text-[#C5A059]'}`}>Servicio de Guante Blanco</span>
-                  {activeAccordion === 'delivery' ? <ChevronUp size={16} className="text-[#C5A059]" /> : <ChevronDown size={16} className="text-charcoal/30" />}
-                </button>
-                <AnimatePresence>
-                  {activeAccordion === 'delivery' && (
-                    <motion.div 
-                      initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pb-8 text-charcoal/60 font-light leading-relaxed text-sm space-y-5">
-                        <p>Las creaciones Lumina se entregan de manera segura y confidencial. Todas las piezas viajan aseguradas al 100% de su valor comercial.</p>
-                        <div className="flex items-center gap-4 bg-[#F5F4F0] p-5">
-                          <Truck size={24} className="text-[#C5A059] shrink-0" strokeWidth={1} /> 
-                          <span className="text-charcoal font-normal text-xs uppercase tracking-widest">Entrega Internacional Blindada (3-5 Días Hábiles)</span>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-            </div>
-
           </motion.div>
-        </div>
-      </main>
 
-      {/* Brand Heritage Section (Below the fold) */}
-      <section className="py-24 md:py-32 bg-charcoal text-white relative flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1599643477874-5c866f4c2810?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center"></div>
-        <div className="relative z-10 text-center max-w-3xl px-6">
-          <Award size={32} className="text-[#C5A059] mx-auto mb-8" strokeWidth={1} />
-          <h2 className="font-serif text-3xl md:text-5xl font-light mb-8 leading-snug">
-            La perfección no es un objetivo, es nuestro estándar base.
-          </h2>
-          <div className="w-16 h-[1px] bg-[#C5A059] mx-auto mb-8"></div>
-          <p className="text-white/60 font-light leading-relaxed md:text-lg">
-            Descubra el herencia detrás de cada pieza de alta joyería. Desde la selección de las gemas más raras del planeta hasta la fundición del oro en hornos de inducción especializados.
-          </p>
-          <NextLink href="/nosotros" className="inline-block mt-12 border border-[#C5A059] text-[#C5A059] py-4 px-10 text-[10px] tracking-[4px] uppercase hover:bg-[#C5A059] hover:text-white transition-colors duration-500">
-            Descubrir La Maison
-          </NextLink>
+          <motion.div style={{ y: yImage, opacity: opacityImage, scale: scaleImage }} className="relative w-full max-w-2xl h-[50vh] md:h-[60vh] z-10 group cursor-crosshair">
+            <div className="absolute inset-0 bg-rg/5 rounded-full blur-[100px] -z-10 group-hover:bg-[#C5A059]/20 transition-colors duration-1000"></div>
+            <Image src={product.image} alt={product.name} fill className="object-contain drop-shadow-[0_30px_50px_rgba(0,0,0,0.2)]" priority />
+          </motion.div>
+
+        </div>
+
+        {/* Scroll Indicator */}
+        <motion.div 
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2, duration: 1 }}
+          className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 text-charcoal/40"
+        >
+          <span className="text-[9px] tracking-[3px] uppercase">Descubrir</span>
+          <ArrowDown size={16} className="animate-bounce" strokeWidth={1} />
+        </motion.div>
+      </section>
+
+      {/* The Price & CTA Section (Editorial Block) */}
+      <section className="py-20 bg-white border-y border-charcoal/5 relative z-20">
+        <div className="max-w-6xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-12">
+          
+          <div className="flex-1">
+            <p className="font-serif text-4xl md:text-5xl text-charcoal tracking-wide mb-2">
+              ${Number(product.price).toLocaleString('es-ES')} <span className="text-sm font-sans uppercase tracking-[3px] text-charcoal/40">USD</span>
+            </p>
+            {product.oldPrice && (
+              <p className="font-serif text-xl text-charcoal/30 line-through">
+                ${Number(product.oldPrice).toLocaleString('es-ES')}
+              </p>
+            )}
+          </div>
+
+          <div className="flex-1 flex flex-col items-center md:items-end w-full">
+            <button 
+              onClick={() => addToCart(product)}
+              disabled={product.stock === 0}
+              className={`w-full md:w-auto px-16 py-6 flex items-center justify-center gap-4 text-[11px] tracking-[4px] uppercase transition-all duration-700 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_40px_-15px_rgba(197,160,89,0.4)] ${product.stock === 0 ? 'bg-[#F5F4F0] text-charcoal/40 cursor-not-allowed border border-charcoal/10' : 'bg-charcoal text-white hover:bg-[#C5A059]'}`}
+            >
+              {product.stock === 0 ? 'Agotado Temporalmente' : 'Adquirir Obra'} 
+            </button>
+            {product.stock > 0 && product.stock <= 5 && (
+               <div className="mt-4 flex items-center gap-2">
+                 <span className="w-2 h-2 rounded-full bg-[#C5A059] animate-pulse"></span>
+                 <p className="text-[9px] tracking-widest text-charcoal/60 uppercase">
+                   Últimas {product.stock} piezas a nivel mundial
+                 </p>
+               </div>
+            )}
+          </div>
         </div>
       </section>
-      
+
+      {/* The Story - Asymmetrical Editorial */}
+      <section className="py-32 px-6 md:px-12 bg-[#FDFCFB] overflow-hidden">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-20 items-center">
+          <div className="lg:w-1/2 relative">
+            <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 1.5 }} className="relative z-10 bg-white p-12 md:p-20 shadow-2xl border border-charcoal/5">
+              <span className="text-[10px] tracking-[5px] uppercase text-[#C5A059] block mb-8 font-medium">La Inspiración</span>
+              <h2 className="font-serif text-3xl md:text-5xl text-charcoal leading-[1.2] mb-10">
+                La perfección no es un detalle, es la esencia de Lumina.
+              </h2>
+              <div className="w-12 h-[1px] bg-[#C5A059] mb-10"></div>
+              <p className="text-charcoal/60 font-light leading-loose text-lg">
+                {product.description || "Diseñada como un tributo a la arquitectura moderna y la herencia orfebre europea. Esta pieza es el resultado de cientos de horas de diseño meticuloso, forjando un equilibrio absoluto entre la audacia visual y la comodidad infinita."}
+              </p>
+            </motion.div>
+            {/* Background decorative image */}
+            <div className="absolute -top-20 -left-20 w-full h-full bg-[url('https://images.unsplash.com/photo-1611085583191-a3b181a88401?q=80&w=1000&auto=format&fit=crop')] bg-cover opacity-10 blur-sm -z-10 hidden md:block"></div>
+          </div>
+
+          <div className="lg:w-1/2 w-full grid grid-cols-2 gap-8">
+            <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 1 }} className="bg-[#F5F4F0] p-8 md:p-12 aspect-square flex flex-col justify-center items-center text-center">
+              <Diamond size={32} className="text-[#C5A059] mb-6" strokeWidth={1} />
+              <h3 className="font-serif text-xl mb-3">Pureza Absoluta</h3>
+              <p className="text-[10px] uppercase tracking-[2px] text-charcoal/50 leading-relaxed">Selección manual bajo microscopio de las gemas más extraordinarias.</p>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.2 }} className="bg-charcoal text-white p-8 md:p-12 aspect-square flex flex-col justify-center items-center text-center mt-12">
+              <Droplet size={32} className="text-[#C5A059] mb-6" strokeWidth={1} />
+              <h3 className="font-serif text-xl mb-3">El Metal</h3>
+              <p className="text-[10px] uppercase tracking-[2px] text-white/50 leading-relaxed">{product.material} de conflicto cero (Conflict-Free).</p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Dark Technical Specifications Section */}
+      <section className="py-32 bg-charcoal text-white relative">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#C5A059]/10 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#C5A059]/5 rounded-full blur-[120px] pointer-events-none"></div>
+        
+        <div className="max-w-6xl mx-auto px-6 md:px-12 relative z-10">
+          <div className="text-center mb-24">
+            <span className="text-[10px] tracking-[6px] uppercase text-[#C5A059] block mb-6 font-medium">Especificaciones</span>
+            <h2 className="font-serif text-4xl md:text-5xl font-light">Anatomía de la Obra</h2>
+            <div className="w-16 h-[1px] bg-[#C5A059]/50 mx-auto mt-10"></div>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-y-16 gap-x-12">
+            
+            <div className="border-l border-white/10 pl-8">
+              <h4 className="text-[10px] tracking-[4px] uppercase text-white/40 mb-2">Fundición</h4>
+              <p className="font-serif text-2xl text-white">{product.material}</p>
+              <p className="text-sm text-white/50 font-light mt-4 leading-relaxed">Forjado en cámaras de presión controlada para evitar la más mínima porosidad en el metal.</p>
+            </div>
+            
+            <div className="border-l border-white/10 pl-8">
+              <h4 className="text-[10px] tracking-[4px] uppercase text-white/40 mb-2">Acabado</h4>
+              <p className="font-serif text-2xl text-white">Pulido Espejo (Mirror-Polish)</p>
+              <p className="text-sm text-white/50 font-light mt-4 leading-relaxed">Más de 40 horas de pulido manual con hilos de seda para un brillo inmaculado y reflejo absoluto.</p>
+            </div>
+            
+            <div className="border-l border-white/10 pl-8">
+              <h4 className="text-[10px] tracking-[4px] uppercase text-white/40 mb-2">Garantía</h4>
+              <p className="font-serif text-2xl text-[#C5A059]">Lumina Lifetime</p>
+              <p className="text-sm text-white/50 font-light mt-4 leading-relaxed">Cobertura vitalicia que incluye limpieza ultrasónica, pulido anual y revisión microscópica de engastes.</p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* Trust & Guarantees Bar */}
+      <section className="py-16 bg-[#F5F4F0] border-y border-charcoal/5">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-wrap justify-center gap-12 md:gap-24">
+          <div className="flex items-center gap-4 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all">
+            <ShieldCheck size={28} className="text-[#C5A059]" strokeWidth={1} />
+            <span className="text-[10px] tracking-[3px] uppercase font-medium">Certificado Oficial</span>
+          </div>
+          <div className="flex items-center gap-4 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all">
+            <Truck size={28} className="text-[#C5A059]" strokeWidth={1} />
+            <span className="text-[10px] tracking-[3px] uppercase font-medium">Entrega Blindada</span>
+          </div>
+          <div className="flex items-center gap-4 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all">
+            <Star size={28} className="text-[#C5A059]" strokeWidth={1} />
+            <span className="text-[10px] tracking-[3px] uppercase font-medium">Calidad Museo</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Floating Action Bar (Sticky at bottom on scroll) */}
+      <AnimatePresence>
+        {showStickyCart && (
+          <motion.div 
+            initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 100, opacity: 0 }} transition={{ duration: 0.5 }}
+            className="fixed bottom-0 left-0 w-full z-50 bg-white/90 backdrop-blur-xl border-t border-charcoal/10 shadow-[0_-10px_40px_rgba(0,0,0,0.05)] py-4 px-6 md:px-12"
+          >
+            <div className="max-w-7xl mx-auto flex items-center justify-between">
+              <div className="hidden md:flex items-center gap-6">
+                <div className="w-12 h-12 relative bg-[#F5F4F0]">
+                  <Image src={product.image} alt={product.name} fill className="object-contain mix-blend-multiply p-1" />
+                </div>
+                <div>
+                  <h4 className="font-serif text-lg text-charcoal">{product.name}</h4>
+                  <p className="text-[10px] tracking-[2px] uppercase text-[#C5A059]">{product.category}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-between w-full md:w-auto gap-8">
+                <p className="font-serif text-xl md:text-2xl text-charcoal">${Number(product.price).toLocaleString('es-ES')}</p>
+                <button 
+                  onClick={() => addToCart(product)}
+                  disabled={product.stock === 0}
+                  className={`px-8 py-4 flex items-center justify-center gap-3 text-[10px] tracking-[3px] uppercase transition-all duration-500 ${product.stock === 0 ? 'bg-[#F5F4F0] text-charcoal/40 cursor-not-allowed' : 'bg-charcoal text-white hover:bg-[#C5A059]'}`}
+                >
+                  {product.stock === 0 ? 'Agotado' : 'Añadir'} <ShoppingBag size={14} />
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <Footer />
     </div>
   );
