@@ -17,8 +17,6 @@ const playfair = Playfair_Display({
 import SmoothScroll from "@/components/SmoothScroll";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 
-import { Providers } from "@/components/Providers";
-
 export const metadata: Metadata = {
   title: "Lumina Jewelry",
   description: "Premium Jewelry E-commerce Platform",
@@ -30,26 +28,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable} h-full antialiased`} suppressHydrationWarning>
-      <body className="min-h-full flex flex-col font-sans transition-colors duration-700 bg-white text-[#1A1A1A] dark:bg-[#050505] dark:text-[#F3F1EE]">
-        <Providers>
-          <SmoothScroll>
-            <CartProvider>
-              {children}
-              <FloatingWhatsApp />
-              <CookieBanner />
-              <Toaster position="bottom-right" toastOptions={{
-                style: {
-                  background: '#111',
-                  color: '#fff',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  borderRadius: '0px',
-                  fontSize: '12px'
-                }
-              }} />
-            </CartProvider>
-          </SmoothScroll>
-        </Providers>
+    <html lang="en" className={`${inter.variable} ${playfair.variable} h-full antialiased`}>
+      <body className="min-h-full flex flex-col bg-[#FAFAFA] text-[#1A1A1A] font-sans">
+        <SmoothScroll>
+          <CartProvider>
+            {children}
+            <FloatingWhatsApp />
+            <CookieBanner />
+          <Toaster position="bottom-right" toastOptions={{
+            style: {
+              background: '#111',
+              color: '#fff',
+              border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: '0px',
+              fontSize: '12px'
+            }
+          }} />
+          </CartProvider>
+        </SmoothScroll>
       </body>
     </html>
   );

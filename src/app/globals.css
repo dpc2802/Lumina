@@ -41,16 +41,3 @@ body {
 @theme inline {
   --animate-ticker: ticker 40s linear infinite;
 }
-
-@custom-variant dark (&:where(.dark, .dark *));
-
-/* View Transitions Overrides */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 0.5s;
-}
-
-/* Base styles that adapt to dark mode seamlessly */
-body {
-  @apply transition-colors duration-700;
-}

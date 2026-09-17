@@ -2,14 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { ShoppingBag, X, CreditCard, Wallet, MessageCircle, Heart, ArrowRight, ChevronDown, Menu, CheckCircle, ShieldCheck, User } from "lucide-react";
-import { Link as NextLink } from "next-view-transitions";
+import NextLink from "next/link";
 import Image from "next/image";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { getProducts } from "@/app/actions";
 import Footer from "@/components/Footer";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import ShareCartButton from "@/components/ShareCartButton";
-import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Storefront({ initialProducts }: { initialProducts: any[] }) {
   const [products, setProducts] = useState<any[]>(initialProducts);
@@ -97,7 +96,6 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
         <div className="flex-1 flex justify-end items-center gap-6">
           {/* Icons */}
           <div className="flex gap-6 items-center text-white">
-            <ThemeToggle />
             <NextLink href="/admin" className="hover:text-rg transition-colors relative" title="Acceso Administrativo">
               <User strokeWidth={1.5} size={20} />
             </NextLink>

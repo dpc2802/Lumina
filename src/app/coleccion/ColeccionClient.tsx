@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { ShoppingBag, X, Heart, ArrowRight, SlidersHorizontal, ChevronDown, Grid2X2, List, Maximize2 } from "lucide-react";
-import { Link as NextLink } from "next-view-transitions";
+import NextLink from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
@@ -12,7 +12,6 @@ import { useCart } from "@/components/CartContext";
 import { toast } from "sonner";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import ShareCartButton from "@/components/ShareCartButton";
-import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Catalog({ initialProducts }: { initialProducts: any[] }) {
   const [products, setProducts] = useState<any[]>(initialProducts);
@@ -71,10 +70,10 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-pearl dark:bg-[#050505] text-charcoal dark:text-[#F3F1EE] font-sans selection:bg-rg selection:text-white transition-colors duration-700">
+    <div className="min-h-screen flex flex-col bg-pearl font-sans">
       <div className="fixed top-0 w-full z-50">
         <AnnouncementBar />
-        <nav className={`w-full transition-all duration-500 px-6 md:px-12 flex items-center justify-between ${scrolled ? 'bg-white/90 dark:bg-[#050505]/90 backdrop-blur-xl shadow-sm h-20 text-charcoal dark:text-[#F3F1EE]' : 'bg-transparent h-28 text-white'}`}>
+        <nav className={`w-full transition-all duration-500 px-6 md:px-12 flex items-center justify-between ${scrolled ? 'bg-white/90 backdrop-blur-xl shadow-sm h-20 text-charcoal' : 'bg-transparent h-28 text-white'}`}>
           <div className="flex-1 flex justify-start">
             <div className="hidden md:flex gap-12 text-[11px] tracking-[2.5px] uppercase font-medium">
             <NextLink href="/" className="hover:text-rg transition-colors relative group">
@@ -93,7 +92,6 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
         </NextLink>
 
         <div className="flex-1 flex justify-end items-center gap-6">
-          <ThemeToggle />
           <button className="relative hover:text-rg transition-colors" onClick={() => setWishlistOpen(true)}>
             <Heart strokeWidth={1.5} size={20} />
             {wishlistItems.length > 0 && (

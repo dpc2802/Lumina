@@ -2,12 +2,11 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Link as NextLink } from "next-view-transitions";
-import { ArrowLeft, Heart, ShoppingBag, ShieldCheck, Truck, RotateCcw, ChevronDown, ChevronUp, Gem } from "lucide-react";
+import NextLink from "next/link";
+import { ArrowLeft, Heart, ShoppingBag, ShieldCheck, Truck, RotateCcw, ChevronDown, ChevronUp, Gem, Palette } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/components/CartContext";
 import Footer from "@/components/Footer";
-import ThemeToggle from "@/components/ThemeToggle";
 
 export default function ProductoClient({ product }: { product: any }) {
   const { addToCart } = useCart();
@@ -39,7 +38,7 @@ export default function ProductoClient({ product }: { product: any }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#FCFBF8] dark:bg-[#050505] font-sans text-[#1A1A1A] dark:text-[#F3F1EE] flex flex-col selection:bg-[#D4AF37] selection:text-white transition-colors duration-700">
+    <div className="min-h-screen bg-[#FCFBF8] font-sans text-[#1A1A1A] flex flex-col selection:bg-[#D4AF37] selection:text-white">
       
       {/* Elegant Navigation */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-500 h-20 flex items-center px-6 md:px-12 ${scrolled ? 'bg-[#FCFBF8]/95 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.03)] border-b border-[#1A1A1A]/5' : 'bg-transparent'}`}>
@@ -49,8 +48,7 @@ export default function ProductoClient({ product }: { product: any }) {
         <NextLink href="/" className="font-serif text-2xl tracking-[0.25em] uppercase text-center flex-1 shrink-0">
           Lumina
         </NextLink>
-        <div className="flex-1 flex justify-end gap-6 items-center">
-          <ThemeToggle />
+        <div className="flex-1 flex justify-end gap-6">
           <button onClick={() => toggleWishlist(product)} className="hover:text-[#D4AF37] transition-colors">
             <Heart size={20} className={isWishlisted ? "fill-[#D4AF37] text-[#D4AF37]" : "text-[#1A1A1A]"} strokeWidth={1} />
           </button>
