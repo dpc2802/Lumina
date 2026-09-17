@@ -213,76 +213,103 @@ export default function ProductoClient({ product }: { product: any }) {
 
       {/* --- DESKTOP ENHANCEMENTS: IMMERSIVE STORYTELLING SECTIONS --- */}
 
-      {/* Cinematic Parallax Section */}
-      <section className="relative w-full h-[60vh] md:h-[80vh] mt-20 flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-[#1A1A1A]">
-          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1573408301145-b98c4af00f72?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-fixed bg-center opacity-40 mix-blend-luminosity"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-transparent to-transparent"></div>
-        </div>
-        <div className="relative z-10 text-center max-w-4xl px-6">
-          <span className="text-[#D4AF37] text-[10px] md:text-[12px] tracking-[6px] uppercase mb-6 block font-medium">La Esencia del Tiempo</span>
-          <h2 className="font-serif text-3xl md:text-5xl lg:text-7xl text-white font-light leading-tight mb-8">
-            Forjado en la Excelencia
-          </h2>
-          <div className="w-16 h-[1px] bg-[#D4AF37] mx-auto mb-8"></div>
-          <p className="text-white/70 font-light text-sm md:text-lg lg:text-xl leading-relaxed max-w-2xl mx-auto">
-            Cada creación de Lumina nace de un compromiso inquebrantable con la perfección. Los artesanos más experimentados del mundo dedican cientos de horas a esculpir, pulir y engastar a mano esta pieza, asegurando que su brillo trascienda el paso de las generaciones.
-          </p>
-        </div>
-      </section>
-
-      {/* Anatomía del Lujo - Split Section with Dark Aesthetic */}
-      <section className="w-full bg-[#1A1A1A] text-white flex flex-col md:flex-row">
-        <div className="w-full md:w-1/2 relative min-h-[50vh] md:min-h-0">
-          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1611085583191-a3b181a88401?q=80&w=1500&auto=format&fit=crop')] bg-cover bg-center opacity-60"></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#1A1A1A] hidden md:block"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] to-transparent md:hidden"></div>
-        </div>
-        <div className="w-full md:w-1/2 p-10 md:p-20 lg:p-32 flex flex-col justify-center">
-          <span className="text-[#D4AF37] text-[10px] tracking-[4px] uppercase mb-6 block">Anatomía de la Obra</span>
-          <h3 className="font-serif text-3xl md:text-5xl mb-12 font-light text-white">Pureza en los Detalles</h3>
+      {/* Cinematic Banner - Light & Elegant */}
+      <section className="w-full bg-[#FCFBF8] py-24 md:py-32 border-t border-[#1A1A1A]/5 mt-20">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 flex flex-col items-center">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <span className="text-[#D4AF37] text-[10px] tracking-[5px] uppercase mb-4 block font-medium">Lumina Heritage</span>
+            <h2 className="font-serif text-3xl md:text-5xl text-[#1A1A1A] font-light leading-snug mb-8">
+              Una devoción absoluta <br className="hidden md:block"/> por la perfección
+            </h2>
+            <div className="w-12 h-[1px] bg-[#D4AF37]/50 mx-auto mb-8"></div>
+            <p className="text-[#1A1A1A]/60 font-light text-sm md:text-base leading-relaxed">
+              Cada creación es el resultado de un delicado ballet entre la artesanía tradicional y la innovación técnica. Nuestros maestros orfebres dedican cientos de horas a esculpir líneas que capturan la luz, logrando un equilibrio sublime que trasciende el tiempo.
+            </p>
+          </div>
           
-          <div className="space-y-12">
-            <div>
-              <h4 className="text-[11px] tracking-[3px] uppercase text-white/40 mb-3 flex items-center gap-3">
-                <span className="w-6 h-[1px] bg-[#D4AF37]"></span> El Material
-              </h4>
-              <p className="font-serif text-2xl text-white mb-2">{product.material}</p>
-              <p className="text-white/60 font-light text-sm md:text-base leading-relaxed">Seleccionado meticulosamente por su pureza, garantizando una resistencia eterna y un reflejo inmaculado ante la luz.</p>
-            </div>
-            
-            <div>
-              <h4 className="text-[11px] tracking-[3px] uppercase text-white/40 mb-3 flex items-center gap-3">
-                <span className="w-6 h-[1px] bg-[#D4AF37]"></span> El Acabado
-              </h4>
-              <p className="font-serif text-2xl text-white mb-2">Pulido Espejo</p>
-              <p className="text-white/60 font-light text-sm md:text-base leading-relaxed">Sometido a un proceso de pulido manual con hilos de seda que elimina cualquier imperfección microscópica.</p>
-            </div>
+          <div className="w-full relative h-[40vh] md:h-[60vh] lg:h-[70vh] overflow-hidden group">
+            <Image 
+              src="https://images.unsplash.com/photo-1599643478524-fb66f7f6f59d?q=80&w=2000&auto=format&fit=crop" 
+              alt="Artesanía Lumina" 
+              fill 
+              className="object-cover transition-transform duration-[3s] group-hover:scale-105" 
+            />
           </div>
         </div>
       </section>
 
-      {/* Value Proposition Strip */}
-      <section className="py-20 md:py-32 bg-[#FCFBF8] border-t border-[#1A1A1A]/5">
-        <div className="text-center mb-16">
-          <h3 className="font-serif text-3xl text-[#1A1A1A] mb-4">El Estándar Lumina</h3>
-          <div className="w-12 h-[1px] bg-[#D4AF37] mx-auto"></div>
+      {/* Delicate Details Grid */}
+      <section className="w-full bg-white py-24 md:py-32">
+        <div className="max-w-[1200px] mx-auto px-6 md:px-12">
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 items-center mb-32">
+            <div className="order-2 md:order-1 relative h-[50vh] md:h-[70vh] w-full p-4">
+              {/* Decorative Frame */}
+              <div className="absolute inset-0 border border-[#D4AF37]/20 m-2"></div>
+              <Image 
+                src="https://images.unsplash.com/photo-1611085583191-a3b181a88401?q=80&w=1000&auto=format&fit=crop" 
+                alt="Detalle del material" 
+                fill 
+                className="object-cover p-6" 
+              />
+            </div>
+            <div className="order-1 md:order-2 flex flex-col justify-center">
+              <span className="text-[#1A1A1A]/40 text-[10px] tracking-[4px] uppercase mb-4 block">La Fundición</span>
+              <h3 className="font-serif text-3xl md:text-4xl text-[#1A1A1A] font-light mb-6">El Material</h3>
+              <p className="text-xl font-serif text-[#D4AF37] mb-6">{product.material}</p>
+              <p className="text-[#1A1A1A]/60 font-light text-sm md:text-base leading-relaxed mb-8">
+                Seleccionado meticulosamente en su estado más puro. Sometido a procesos de fundición en cámaras de atmósfera controlada para evitar la más mínima porosidad, garantizando una resistencia inquebrantable y un tono inmaculado.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 items-center">
+            <div className="flex flex-col justify-center md:text-right">
+              <span className="text-[#1A1A1A]/40 text-[10px] tracking-[4px] uppercase mb-4 block">El Acabado</span>
+              <h3 className="font-serif text-3xl md:text-4xl text-[#1A1A1A] font-light mb-6">Pulido Espejo</h3>
+              <p className="text-xl font-serif text-[#D4AF37] mb-6">Mirror-Polish</p>
+              <p className="text-[#1A1A1A]/60 font-light text-sm md:text-base leading-relaxed mb-8">
+                Un trabajo que requiere décadas de experiencia. Cada faceta y curva es pulida a mano con hilos de seda, revelando un resplandor impecable y un reflejo perfecto que solo los más grandes joyeros del mundo pueden lograr.
+              </p>
+            </div>
+            <div className="relative h-[50vh] md:h-[70vh] w-full p-4">
+               {/* Decorative Frame */}
+               <div className="absolute inset-0 border border-[#D4AF37]/20 m-2"></div>
+               <Image 
+                src="https://images.unsplash.com/photo-1596541604746-86d39cb20ed6?q=80&w=1000&auto=format&fit=crop" 
+                alt="Detalle del pulido" 
+                fill 
+                className="object-cover p-6 grayscale mix-blend-multiply opacity-80" 
+              />
+            </div>
+          </div>
+
         </div>
-        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-3 gap-12 md:gap-8 text-center">
-          <div className="flex flex-col items-center gap-5">
-            <Gem size={32} className="text-[#D4AF37]" strokeWidth={1} />
-            <h4 className="font-serif text-xl md:text-2xl text-[#1A1A1A]">Calidad Extraordinaria</h4>
-            <p className="text-sm text-[#1A1A1A]/60 font-light px-4 leading-relaxed">Rigurosa selección de materiales bajo estándares internacionales del GIA.</p>
+      </section>
+
+      {/* Refined Value Proposition */}
+      <section className="py-24 bg-[#FCFBF8] border-t border-[#1A1A1A]/5">
+        <div className="max-w-[1000px] mx-auto px-6 grid grid-cols-1 sm:grid-cols-3 gap-12 text-center divide-y sm:divide-y-0 sm:divide-x divide-[#1A1A1A]/10">
+          <div className="flex flex-col items-center gap-4 pt-8 sm:pt-0 sm:px-8">
+            <Gem size={28} className="text-[#D4AF37] mb-2" strokeWidth={1} />
+            <h4 className="font-serif text-lg text-[#1A1A1A]">Calidad Certificada</h4>
+            <p className="text-[11px] text-[#1A1A1A]/50 font-light leading-relaxed">
+              Materiales y gemas analizadas bajo los más estrictos estándares internacionales.
+            </p>
           </div>
-          <div className="flex flex-col items-center gap-5">
-            <ShieldCheck size={32} className="text-[#D4AF37]" strokeWidth={1} />
-            <h4 className="font-serif text-xl md:text-2xl text-[#1A1A1A]">Compra Segura</h4>
-            <p className="text-sm text-[#1A1A1A]/60 font-light px-4 leading-relaxed">Transacciones encriptadas de grado militar y absoluta privacidad de sus datos.</p>
+          <div className="flex flex-col items-center gap-4 pt-8 sm:pt-0 sm:px-8">
+            <ShieldCheck size={28} className="text-[#D4AF37] mb-2" strokeWidth={1} />
+            <h4 className="font-serif text-lg text-[#1A1A1A]">Tranquilidad Absoluta</h4>
+            <p className="text-[11px] text-[#1A1A1A]/50 font-light leading-relaxed">
+              Pagos encriptados y confidencialidad total de sus datos personales.
+            </p>
           </div>
-          <div className="flex flex-col items-center gap-5">
-            <Truck size={32} className="text-[#D4AF37]" strokeWidth={1} />
-            <h4 className="font-serif text-xl md:text-2xl text-[#1A1A1A]">Atención Exclusiva</h4>
-            <p className="text-sm text-[#1A1A1A]/60 font-light px-4 leading-relaxed">Empaque insignia de regalo en madera lacada y servicio postventa vitalicio.</p>
+          <div className="flex flex-col items-center gap-4 pt-8 sm:pt-0 sm:px-8">
+            <Truck size={28} className="text-[#D4AF37] mb-2" strokeWidth={1} />
+            <h4 className="font-serif text-lg text-[#1A1A1A]">Entrega Privilegiada</h4>
+            <p className="text-[11px] text-[#1A1A1A]/50 font-light leading-relaxed">
+              Envíos internacionales blindados y empaque de alta regalía.
+            </p>
           </div>
         </div>
       </section>
