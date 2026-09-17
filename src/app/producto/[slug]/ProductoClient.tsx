@@ -6,15 +6,22 @@ import NextLink from "next/link";
 import { ArrowLeft, Heart, ShoppingBag, ChevronDown, ChevronUp, ArrowRight, ShieldCheck, Truck, RotateCcw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/components/CartContext";
-import { useWishlist } from "@/components/WishlistContext";
 import Footer from "@/components/Footer";
 
 export default function ProductoClient({ product }: { product: any }) {
   const { addToCart } = useCart();
-  const { wishlistItems, toggleWishlist } = useWishlist();
+  const [wishlistItems, setWishlistItems] = useState<any[]>([]);
   const [activeAccordion, setActiveAccordion] = useState<string | null>("description");
   
   const isWishlisted = wishlistItems.some(item => item.id === product.id);
+
+  const toggleWishlist = (product: any) => {
+    if (isWishlisted) {
+      setWishlistItems(wishlistItems.filter(item => item.id !== product.id));
+    } else {
+      setWishlistItems([...wishlistItems, product]);
+    }
+  };
 
   const toggleAccordion = (id: string) => {
     if (activeAccordion === id) setActiveAccordion(null);
