@@ -265,103 +265,127 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
       <Footer />
 
       {/* Quick View Modal - High Refinery Edition */}
+      {/* Quick View Modal - Top Tier Editorial Edition */}
       <AnimatePresence>
       {selectedProduct && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-12">
-          {/* Backdrop */}
+          {/* Blur Backdrop */}
           <motion.div 
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/70 backdrop-blur-md" 
+            initial={{ opacity: 0, backdropFilter: "blur(0px)" }} 
+            animate={{ opacity: 1, backdropFilter: "blur(12px)" }} 
+            exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            className="absolute inset-0 bg-[#1A1A1A]/60" 
             onClick={() => setSelectedProduct(null)}
           ></motion.div>
           
           {/* Modal Content */}
           <motion.div 
-            initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="relative bg-white w-full max-w-6xl max-h-[90vh] flex flex-col md:flex-row shadow-[0_30px_100px_rgba(0,0,0,0.8)] overflow-hidden border border-charcoal/10"
+            initial={{ opacity: 0, scale: 0.98, y: 20 }} 
+            animate={{ opacity: 1, scale: 1, y: 0 }} 
+            exit={{ opacity: 0, scale: 0.98, y: 20 }} 
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="relative w-full max-w-6xl bg-white max-h-[90vh] flex flex-col md:flex-row shadow-[0_40px_100px_rgba(0,0,0,0.5)] overflow-hidden"
           >
-            <button onClick={() => setSelectedProduct(null)} className="absolute top-6 right-6 z-30 p-2 text-charcoal hover:text-rg transition-colors bg-white/80 backdrop-blur-md rounded-full shadow-sm">
-               <X size={20} strokeWidth={1.5} />
+            {/* Close Button */}
+            <button 
+              onClick={() => setSelectedProduct(null)} 
+              className="absolute top-6 right-6 z-30 p-3 text-[#1A1A1A] hover:text-[#D4AF37] transition-all bg-white/90 backdrop-blur-md rounded-full hover:rotate-90 duration-500 shadow-sm"
+            >
+               <X size={20} strokeWidth={1} />
             </button>
             
-            {/* Image Panel - Architectural Framing */}
-            <div className="w-full md:w-1/2 relative min-h-[400px] md:min-h-[700px] bg-charcoal">
-              <Image src={selectedProduct.image} alt={selectedProduct.name} fill className="object-cover opacity-90 mix-blend-screen" />
+            {/* Left: Product Showcase (Museum Display Style) */}
+            <div className="w-full md:w-1/2 relative min-h-[40vh] md:min-h-[700px] bg-[#FAFAFA] flex items-center justify-center p-12 overflow-hidden group">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.2 }}
+                className="relative w-full h-full aspect-[4/5] flex items-center justify-center transition-transform duration-[2s] ease-out group-hover:scale-110"
+              >
+                 <Image 
+                   src={selectedProduct.image} 
+                   alt={selectedProduct.name} 
+                   fill 
+                   className="object-contain mix-blend-multiply drop-shadow-2xl p-8" 
+                 />
+              </motion.div>
               
-              {/* Inner Luxury Details */}
-              <div className="absolute inset-6 border border-white/20 pointer-events-none z-10"></div>
-              <div className="absolute top-6 left-6 w-4 h-4 border-t border-l border-rg z-10"></div>
-              <div className="absolute top-6 right-6 w-4 h-4 border-t border-r border-rg z-10"></div>
-              <div className="absolute bottom-6 left-6 w-4 h-4 border-b border-l border-rg z-10"></div>
-              <div className="absolute bottom-6 right-6 w-4 h-4 border-b border-r border-rg z-10"></div>
-              
-              <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
-                 <span className="font-serif text-8xl md:text-9xl text-white tracking-[0.2em] uppercase -rotate-90 md:rotate-0">Lumina</span>
+              {/* Subtle Branding Watermark */}
+              <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none">
+                 <span className="font-serif text-[150px] md:text-[200px] text-[#1A1A1A] tracking-widest uppercase -rotate-90 md:rotate-0 whitespace-nowrap">Lumina</span>
               </div>
             </div>
             
-            {/* Details Panel - Certificate of Authenticity Style */}
-            <div className="w-full md:w-1/2 p-6 md:p-12 lg:p-16 flex flex-col justify-center bg-pearl relative overflow-y-auto scrollbar-hide">
-               {/* Inner Certificate Border */}
-               <div className="absolute inset-4 border border-charcoal/5 pointer-events-none"></div>
-               
-               <div className="relative z-10 h-full flex flex-col">
-                 <span className="text-[10px] tracking-[4px] uppercase text-rg mb-6 flex items-center gap-4">
-                   <div className="w-8 h-[1px] bg-rg"></div>
-                   {selectedProduct.category}
-                 </span>
+            {/* Right: Editorial Information Panel */}
+            <div className="w-full md:w-1/2 bg-white relative overflow-y-auto scrollbar-hide flex flex-col">
+               <div className="p-8 md:p-12 lg:p-16 flex-1 flex flex-col">
                  
-                 <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-charcoal font-light mb-6 tracking-tight leading-[1.1]">{selectedProduct.name}</h2>
-                 
-                 <div className="mb-10">
-                   <span className="text-charcoal/60 text-[9px] tracking-[0.3em] uppercase bg-white px-4 py-2 border border-charcoal/5 shadow-[0_4px_10px_rgba(0,0,0,0.02)] inline-block">
-                     {selectedProduct.material}
-                   </span>
-                 </div>
-                 
-                 <p className="font-serif text-3xl text-charcoal mb-10">${selectedProduct.price.toLocaleString('es-ES')}</p>
-                 
-                 {/* Geometric Divider */}
-                 <div className="w-full flex items-center justify-center gap-4 mb-10">
-                   <div className="h-[1px] flex-1 bg-charcoal/10"></div>
-                   <div className="w-2 h-2 rotate-45 border border-rg"></div>
-                   <div className="h-[1px] flex-1 bg-charcoal/10"></div>
-                 </div>
-                 
-                 <p className="text-sm text-charcoal3 font-light leading-relaxed mb-10 text-justify">
-                   {selectedProduct.description}
-                 </p>
-                 
-                 <ul className="space-y-4 mb-12 border-t border-b border-charcoal/5 py-8 bg-white/40 px-6 md:px-8">
-                   {selectedProduct.details?.map((detail: string, i: number) => (
-                     <li key={i} className="text-xs tracking-wide text-charcoal/80 font-light flex items-center gap-4">
-                       <div className="w-1 h-1 bg-rg rotate-45 shrink-0"></div> {detail}
-                     </li>
-                   ))}
-                 </ul>
-                 
-                 <div className="flex-1"></div>
-                 
-                 <NextLink href={`/producto/${selectedProduct.slug}`} className="w-full py-4 text-center text-[10px] tracking-[3px] uppercase text-charcoal border border-charcoal/20 hover:border-charcoal transition-colors mb-4 block">
-                   Ver Detalles Completos
-                 </NextLink>
+                 <motion.div initial="hidden" animate="visible" variants={{
+                   hidden: { opacity: 0 },
+                   visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.3 } }
+                 }}>
+                   
+                   <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8 } } }}>
+                     <span className="text-[10px] tracking-[5px] uppercase text-[#1A1A1A]/40 mb-4 block">
+                       {selectedProduct.category}
+                     </span>
+                     <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-[#1A1A1A] font-light mb-4 tracking-tight leading-[1.1]">
+                       {selectedProduct.name}
+                     </h2>
+                   </motion.div>
 
+                   <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8 } } }} className="flex items-center gap-6 mb-10">
+                     <p className="font-serif text-3xl text-[#D4AF37] italic">${Number(selectedProduct.price).toLocaleString('es-ES')}</p>
+                     <div className="h-4 w-[1px] bg-[#1A1A1A]/20"></div>
+                     <span className="text-[#1A1A1A]/60 text-[10px] tracking-[3px] uppercase">
+                       {selectedProduct.material}
+                     </span>
+                   </motion.div>
+                   
+                   <motion.div variants={{ hidden: { opacity: 0, scaleX: 0 }, visible: { opacity: 1, scaleX: 1, transition: { duration: 1 } } }} className="w-12 h-[1px] bg-[#1A1A1A]/20 mb-8 origin-left"></motion.div>
+                   
+                   <motion.p variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8 } } }} className="text-[13px] text-[#1A1A1A]/60 font-light leading-[1.8] mb-12 max-w-md">
+                     {selectedProduct.description}
+                   </motion.p>
+                   
+                   <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8 } } }} className="space-y-4 mb-12">
+                     <span className="text-[9px] tracking-[3px] uppercase text-[#1A1A1A] font-medium block mb-6">Especificaciones</span>
+                     {(selectedProduct.details && selectedProduct.details.length > 0 ? selectedProduct.details : ['Metal de máxima pureza', 'Certificación Lumina Care', 'Ajuste de precisión']).map((detail: string, i: number) => (
+                       <div key={i} className="flex items-center gap-4 border-b border-[#1A1A1A]/5 pb-3">
+                         <div className="w-1.5 h-1.5 border border-[#D4AF37] rotate-45 shrink-0"></div> 
+                         <span className="text-[11px] tracking-wide text-[#1A1A1A]/70 font-light">{detail}</span>
+                       </div>
+                     ))}
+                   </motion.div>
+
+                 </motion.div>
+
+               </div>
+
+               {/* Sticky Action Footer */}
+               <motion.div 
+                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.8 }}
+                 className="p-8 md:px-12 md:py-8 bg-[#FCFBF8] border-t border-[#1A1A1A]/5 mt-auto"
+               >
                  <div className="flex gap-4">
                    <button 
                       disabled={selectedProduct.stock === 0}
                       onClick={() => { addToCart(selectedProduct); setSelectedProduct(null); setCartOpen(true); }}
-                      className={`flex-1 text-white py-6 text-[11px] tracking-[4px] uppercase border border-transparent transition-all duration-500 flex justify-center items-center gap-4 group ${selectedProduct.stock === 0 ? 'bg-charcoal/30 cursor-not-allowed' : 'bg-charcoal hover:bg-white hover:text-charcoal hover:border-charcoal'}`}
+                      className={`flex-1 text-white py-5 text-[10px] tracking-[4px] uppercase transition-all duration-500 flex justify-center items-center gap-4 group ${selectedProduct.stock === 0 ? 'bg-[#1A1A1A]/30 cursor-not-allowed' : 'bg-[#1A1A1A] hover:bg-[#D4AF37]'}`}
                     >
-                      {selectedProduct.stock === 0 ? 'Pieza Agotada' : 'Añadir a la cesta'} {selectedProduct.stock > 0 && <ArrowRight size={14} className="group-hover:translate-x-2 transition-transform" />}
+                      {selectedProduct.stock === 0 ? 'Agotado' : 'Añadir a la cesta'}
                    </button>
                    <button 
                       onClick={() => toggleWishlist(selectedProduct)}
-                      className="w-16 flex items-center justify-center border border-charcoal/20 hover:border-rg transition-colors"
+                      className="w-16 flex items-center justify-center border border-[#1A1A1A]/10 hover:border-[#D4AF37] hover:text-[#D4AF37] bg-white transition-colors"
                    >
-                      <Heart size={20} className={wishlistItems.find(item => item.id === selectedProduct.id) ? "text-rg fill-rg" : "text-charcoal"} strokeWidth={1} />
+                      <Heart size={18} className={wishlistItems.find(item => item.id === selectedProduct.id) ? "text-[#D4AF37] fill-[#D4AF37]" : "text-[#1A1A1A]/50"} strokeWidth={1} />
                    </button>
                  </div>
-               </div>
+                 
+                 <NextLink href={`/producto/${selectedProduct.slug}`} className="w-full text-center text-[10px] tracking-[3px] uppercase text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors mt-6 block">
+                   Ver Página Completa del Producto →
+                 </NextLink>
+               </motion.div>
+
              </div>
             </motion.div>
           </div>
