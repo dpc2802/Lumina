@@ -7,6 +7,7 @@ import Image from "next/image";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { getProducts } from "@/app/actions";
 import Footer from "@/components/Footer";
+import AnnouncementBar from "@/components/AnnouncementBar";
 
 export default function Storefront({ initialProducts }: { initialProducts: any[] }) {
   const [products, setProducts] = useState<any[]>(initialProducts);
@@ -68,7 +69,9 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
       )}
 
       {/* Floating Glassmorphism Navigation */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-500 px-6 md:px-12 flex items-center justify-between ${scrolled ? 'bg-black/80 backdrop-blur-xl shadow-lg h-20' : 'bg-transparent h-28'}`}>
+      <div className="fixed top-0 w-full z-50">
+        <AnnouncementBar />
+        <nav className={`w-full transition-all duration-500 px-6 md:px-12 flex items-center justify-between ${scrolled ? 'bg-black/80 backdrop-blur-xl shadow-lg h-20' : 'bg-transparent h-28'}`}>
         <div className="flex-1 flex justify-start">
           <button className="md:hidden text-white p-2 hover:text-rg transition-colors" onClick={() => setMobileMenuOpen(true)}>
             <Menu size={24} strokeWidth={1.5} />
@@ -117,6 +120,7 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
           </div>
         </div>
       </nav>
+      </div>
 
       {/* Hero Section */}
       <header className="relative w-full min-h-screen flex flex-col justify-between items-center overflow-hidden pt-32 pb-8">
