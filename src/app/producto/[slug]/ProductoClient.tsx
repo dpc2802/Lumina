@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import NextLink from "next/link";
-import { ArrowLeft, Heart, ShoppingBag, ShieldCheck, Truck, RotateCcw, ChevronDown, ChevronUp, Gem } from "lucide-react";
+import { ArrowLeft, Heart, ShoppingBag, ShieldCheck, Truck, RotateCcw, ChevronDown, ChevronUp, Gem, Palette } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/components/CartContext";
 import Footer from "@/components/Footer";
@@ -14,6 +14,7 @@ export default function ProductoClient({ product }: { product: any }) {
   const [activeTab, setActiveTab] = useState<string>("detalles");
   const [activeAccordion, setActiveAccordion] = useState<string | null>("description");
   const [scrolled, setScrolled] = useState(false);
+  const [skinTone, setSkinTone] = useState<'blanco' | 'claro' | 'medio' | 'oscuro'>('blanco');
   
   const isWishlisted = wishlistItems.some(item => item.id === product.id);
 
@@ -61,19 +62,52 @@ export default function ProductoClient({ product }: { product: any }) {
         <div className="w-full lg:w-1/2 p-4 md:p-12 lg:p-16 lg:sticky lg:top-20 lg:h-[calc(100vh-80px)] flex items-center justify-center">
           <motion.div 
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}
-            className="w-full h-[50vh] md:h-full md:min-h-[60vh] relative bg-white border border-[#1A1A1A]/5 shadow-[0_10px_40px_rgba(0,0,0,0.02)] flex items-center justify-center p-6 md:p-12 group overflow-hidden"
+            className={`w-full h-[50vh] md:h-full md:min-h-[60vh] relative border border-[#1A1A1A]/5 shadow-[0_10px_40px_rgba(0,0,0,0.02)] flex items-center justify-center p-6 md:p-12 group overflow-hidden transition-colors duration-1000 ${
+              skinTone === 'blanco' ? 'bg-white' : 
+              skinTone === 'claro' ? 'bg-[#f7e0d4]' : 
+              skinTone === 'medio' ? 'bg-[#c68e6f]' : 
+              'bg-[#5c3a21]'
+            }`}
           >
             {/* Subtle frame corners */}
-            <div className="absolute top-4 left-4 md:top-6 md:left-6 w-4 h-4 border-t border-l border-[#D4AF37]/40 transition-all duration-700 group-hover:w-8 group-hover:h-8"></div>
-            <div className="absolute bottom-4 right-4 md:bottom-6 md:right-6 w-4 h-4 border-b border-r border-[#D4AF37]/40 transition-all duration-700 group-hover:w-8 group-hover:h-8"></div>
+            <div className={`absolute top-4 left-4 md:top-6 md:left-6 w-4 h-4 border-t border-l transition-all duration-700 group-hover:w-8 group-hover:h-8 ${skinTone !== 'blanco' ? 'border-white/40' : 'border-[#D4AF37]/40'}`}></div>
+            <div className={`absolute bottom-4 right-4 md:bottom-6 md:right-6 w-4 h-4 border-b border-r transition-all duration-700 group-hover:w-8 group-hover:h-8 ${skinTone !== 'blanco' ? 'border-white/40' : 'border-[#D4AF37]/40'}`}></div>
             
             <div className="relative w-full h-full">
               <Image 
                 src={product.image} 
                 alt={product.name} 
                 fill 
-                className="object-contain mix-blend-multiply drop-shadow-xl transition-transform duration-[2s] group-hover:scale-[1.03]" 
+                className={`object-contain mix-blend-multiply drop-shadow-xl transition-transform duration-[2s] group-hover:scale-[1.03] ${skinTone !== 'blanco' ? 'opacity-90 saturate-[0.8]' : ''}`} 
                 priority 
+              />
+            </div>
+
+            {/* Skin Tone Selector (Floating) */}
+            <div className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-20 bg-white/90 backdrop-blur-md border border-[#1A1A1A]/10 px-5 py-3 rounded-full shadow-2xl flex items-center gap-4">
+              <span className="text-[9px] tracking-[2px] uppercase text-[#1A1A1A]/50 flex items-center gap-1.5 font-bold">
+                <Palette size={12} /> Contraste
+              </span>
+              <div className="h-4 w-[1px] bg-[#1A1A1A]/10"></div>
+              <button 
+                onClick={() => setSkinTone('blanco')} 
+                className={`w-5 h-5 rounded-full bg-white border border-[#1A1A1A]/20 transition-all duration-300 ${skinTone === 'blanco' ? 'scale-125 shadow-md' : 'hover:scale-110'}`} 
+                title="Fondo Estudio"
+              />
+              <button 
+                onClick={() => setSkinTone('claro')} 
+                className={`w-5 h-5 rounded-full bg-[#f7e0d4] border border-[#1A1A1A]/10 transition-all duration-300 ${skinTone === 'claro' ? 'scale-125 shadow-md border-[#1A1A1A]/40' : 'hover:scale-110'}`} 
+                title="Piel Clara"
+              />
+              <button 
+                onClick={() => setSkinTone('medio')} 
+                className={`w-5 h-5 rounded-full bg-[#c68e6f] border border-[#1A1A1A]/10 transition-all duration-300 ${skinTone === 'medio' ? 'scale-125 shadow-md border-[#1A1A1A]/40' : 'hover:scale-110'}`} 
+                title="Piel Media"
+              />
+              <button 
+                onClick={() => setSkinTone('oscuro')} 
+                className={`w-5 h-5 rounded-full bg-[#5c3a21] border border-[#1A1A1A]/10 transition-all duration-300 ${skinTone === 'oscuro' ? 'scale-125 shadow-md border-[#1A1A1A]/40' : 'hover:scale-110'}`} 
+                title="Piel Oscura"
               />
             </div>
           </motion.div>
