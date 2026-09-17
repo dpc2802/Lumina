@@ -211,90 +211,111 @@ export default function ProductoClient({ product }: { product: any }) {
         </div>
       </main>
 
-      {/* --- DESKTOP ENHANCEMENTS: IMAGE-FREE TYPOGRAPHIC LUXURY --- */}
+      {/* --- DESKTOP ENHANCEMENTS: CINEMATIC BRAND HERITAGE --- */}
+      {/* (These images are static brand assets, meaning the client never has to upload them per product) */}
 
-      {/* The Manifesto - Pure Typography */}
-      <section className="w-full bg-[#FCFBF8] py-24 md:py-32 border-t border-[#1A1A1A]/5 mt-10 md:mt-20">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <span className="text-[#D4AF37] text-[10px] tracking-[6px] uppercase mb-8 block font-medium">
-            El Manifiesto Lumina
-          </span>
-          <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-[#1A1A1A] font-light leading-[1.3] mb-10">
-            "La verdadera exclusividad no requiere de adornos innecesarios; se sostiene por la pureza innegable de su creación."
-          </h2>
-          <div className="w-10 h-[1px] bg-[#1A1A1A]/20 mx-auto"></div>
+      {/* The Mastery - Immersive Full-Width */}
+      <section className="relative w-full h-[60vh] md:h-[80vh] mt-10 md:mt-20 flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0">
+          <Image 
+            src="https://images.unsplash.com/photo-1611085583191-a3b181a88401?q=80&w=2000&auto=format&fit=crop" 
+            alt="Lumina Mastery" 
+            fill 
+            className="object-cover object-center opacity-90 scale-105 transition-transform duration-[10s] hover:scale-100" 
+          />
+          {/* Elegant Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-[#1A1A1A]/40 to-transparent"></div>
+        </div>
+        
+        <div className="relative z-10 text-center max-w-4xl px-6 mt-32">
+          <motion.span 
+            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}
+            className="text-[#D4AF37] text-[10px] md:text-[12px] tracking-[8px] uppercase mb-6 block font-medium"
+          >
+            Maestría Lumina
+          </motion.span>
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }}
+            className="font-serif text-3xl md:text-5xl lg:text-7xl text-white font-light leading-[1.1] mb-8 drop-shadow-2xl"
+          >
+            La Perfección no <br className="hidden md:block"/> admite atajos.
+          </motion.h2>
+          <motion.div 
+            initial={{ opacity: 0, width: 0 }} whileInView={{ opacity: 1, width: "64px" }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.4 }}
+            className="h-[1px] bg-[#D4AF37] mx-auto mb-8"
+          ></motion.div>
         </div>
       </section>
 
-      {/* Technical Blueprint - Grid Layout without images */}
-      <section className="w-full bg-white py-20 md:py-32 border-t border-[#1A1A1A]/5">
-        <div className="max-w-[1200px] mx-auto px-6 md:px-12">
+      {/* Overlapping Technical Sheet */}
+      <section className="w-full bg-[#1A1A1A] pb-24 md:pb-32 px-6">
+        <div className="max-w-[1200px] mx-auto relative -mt-20 md:-mt-32 z-20">
           
-          <div className="flex flex-col md:flex-row items-baseline justify-between mb-16 md:mb-24 gap-8">
-            <h3 className="font-serif text-4xl md:text-5xl text-[#1A1A1A] font-light">Ficha Técnica</h3>
-            <p className="text-[10px] tracking-[4px] uppercase text-[#1A1A1A]/40 text-left md:text-right">
-              Documento de Autenticidad <br/> y Especificaciones
-            </p>
+          <div className="flex flex-col md:flex-row bg-white shadow-[0_20px_60px_rgba(0,0,0,0.4)]">
+            {/* Left Image - Static Craftsmanship Image */}
+            <div className="w-full md:w-5/12 relative h-[40vh] md:h-auto">
+              <Image 
+                src="https://images.unsplash.com/photo-1596541604746-86d39cb20ed6?q=80&w=1000&auto=format&fit=crop" 
+                alt="Artesanía" 
+                fill 
+                className="object-cover grayscale mix-blend-multiply opacity-90" 
+              />
+              <div className="absolute inset-0 bg-[#D4AF37]/10"></div>
+            </div>
+
+            {/* Right Content - Dynamic Product Data */}
+            <div className="w-full md:w-7/12 p-10 md:p-16 lg:p-24 flex flex-col justify-center bg-[#FCFBF8]">
+              <span className="text-[#1A1A1A]/40 text-[10px] tracking-[4px] uppercase mb-8 block">Especificaciones de la Pieza</span>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
+                <div>
+                  <h4 className="font-serif text-2xl text-[#1A1A1A] mb-2">{product.material}</h4>
+                  <p className="text-[10px] tracking-[2px] uppercase text-[#D4AF37] mb-4">Materia Prima</p>
+                  <p className="text-sm text-[#1A1A1A]/60 font-light leading-relaxed">Fundición en atmósfera controlada para garantizar una estructura molecular impecable y un brillo eterno.</p>
+                </div>
+                
+                <div>
+                  <h4 className="font-serif text-2xl text-[#1A1A1A] mb-2">Mirror Polish</h4>
+                  <p className="text-[10px] tracking-[2px] uppercase text-[#D4AF37] mb-4">Técnica de Acabado</p>
+                  <p className="text-sm text-[#1A1A1A]/60 font-light leading-relaxed">Pulido artesanal minucioso con hilos de seda que elimina cualquier imperfección microscópica.</p>
+                </div>
+
+                <div>
+                  <h4 className="font-serif text-2xl text-[#1A1A1A] mb-2">GIA Certified</h4>
+                  <p className="text-[10px] tracking-[2px] uppercase text-[#D4AF37] mb-4">Origen Ético</p>
+                  <p className="text-sm text-[#1A1A1A]/60 font-light leading-relaxed">Nuestros materiales cumplen estrictamente con los estándares globales y el Tratado de Kimberley.</p>
+                </div>
+
+                <div>
+                  <h4 className="font-serif text-2xl text-[#1A1A1A] mb-2">Lumina Care</h4>
+                  <p className="text-[10px] tracking-[2px] uppercase text-[#D4AF37] mb-4">Servicio Vitalicio</p>
+                  <p className="text-sm text-[#1A1A1A]/60 font-light leading-relaxed">Incluye mantenimiento preventivo, limpieza ultrasónica y ajuste de precisión de cortesía.</p>
+                </div>
+              </div>
+
+            </div>
           </div>
 
-          {/* Museum Plaque Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-t border-l border-[#1A1A1A]/10">
-            
-            <div className="p-8 md:p-12 border-b border-r border-[#1A1A1A]/10 hover:bg-[#FCFBF8] transition-colors">
-              <span className="text-[#D4AF37] text-[10px] tracking-[3px] uppercase block mb-6">01. Fundición</span>
-              <h4 className="font-serif text-2xl text-[#1A1A1A] mb-4">{product.material}</h4>
-              <p className="text-sm text-[#1A1A1A]/60 font-light leading-relaxed">
-                Seleccionado por su pureza molecular. Forjado en cámaras de atmósfera controlada para asegurar cero porosidad.
-              </p>
-            </div>
-
-            <div className="p-8 md:p-12 border-b border-r border-[#1A1A1A]/10 hover:bg-[#FCFBF8] transition-colors">
-              <span className="text-[#D4AF37] text-[10px] tracking-[3px] uppercase block mb-6">02. Pulido</span>
-              <h4 className="font-serif text-2xl text-[#1A1A1A] mb-4">Mirror-Polish</h4>
-              <p className="text-sm text-[#1A1A1A]/60 font-light leading-relaxed">
-                Acabado manual con hilos de seda, un proceso de más de 40 horas que garantiza un reflejo inmaculado y perfecto.
-              </p>
-            </div>
-
-            <div className="p-8 md:p-12 border-b border-r border-[#1A1A1A]/10 hover:bg-[#FCFBF8] transition-colors">
-              <span className="text-[#D4AF37] text-[10px] tracking-[3px] uppercase block mb-6">03. Origen</span>
-              <h4 className="font-serif text-2xl text-[#1A1A1A] mb-4">Ético / GIA</h4>
-              <p className="text-sm text-[#1A1A1A]/60 font-light leading-relaxed">
-                Toda la materia prima cumple estrictamente con el Tratado de Kimberley (Conflict-Free) y normativas globales.
-              </p>
-            </div>
-
-            <div className="p-8 md:p-12 border-b border-r border-[#1A1A1A]/10 hover:bg-[#FCFBF8] transition-colors">
-              <span className="text-[#D4AF37] text-[10px] tracking-[3px] uppercase block mb-6">04. Respaldo</span>
-              <h4 className="font-serif text-2xl text-[#1A1A1A] mb-4">Lumina Care</h4>
-              <p className="text-sm text-[#1A1A1A]/60 font-light leading-relaxed">
-                Garantía vitalicia que incluye servicios de limpieza ultrasónica, revisión de engastes y pulido anual de cortesía.
-              </p>
-            </div>
-
-          </div>
         </div>
       </section>
 
-      {/* Refined Minimalist Value Proposition */}
-      <section className="py-20 bg-[#1A1A1A] text-white">
-        <div className="max-w-[1000px] mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-12 md:gap-6 text-center">
-          <div className="flex-1 flex flex-col items-center">
-            <Gem size={24} className="text-[#D4AF37] mb-4" strokeWidth={1} />
-            <h4 className="font-serif text-lg tracking-wide mb-2">Calidad Certificada</h4>
-            <p className="text-[11px] text-white/50 font-light max-w-[200px]">Estándares internacionales para la más alta exigencia.</p>
+      {/* Modern Value Strip */}
+      <section className="py-16 bg-[#0A0A0A] border-t border-white/5">
+        <div className="max-w-[1200px] mx-auto px-6 grid grid-cols-1 sm:grid-cols-3 gap-12 text-center">
+          <div className="flex flex-col items-center">
+            <ShieldCheck size={28} className="text-[#D4AF37] mb-4" strokeWidth={1} />
+            <h4 className="text-[11px] tracking-[3px] uppercase text-white mb-2">Compra Blindada</h4>
+            <p className="text-xs text-white/40 font-light px-8">Transacciones encriptadas con protocolos de grado militar.</p>
           </div>
-          <div className="hidden md:block w-[1px] h-12 bg-white/10"></div>
-          <div className="flex-1 flex flex-col items-center">
-            <ShieldCheck size={24} className="text-[#D4AF37] mb-4" strokeWidth={1} />
-            <h4 className="font-serif text-lg tracking-wide mb-2">Tranquilidad Absoluta</h4>
-            <p className="text-[11px] text-white/50 font-light max-w-[200px]">Adquisición blindada y máxima confidencialidad.</p>
+          <div className="flex flex-col items-center sm:border-l sm:border-white/5">
+            <Truck size={28} className="text-[#D4AF37] mb-4" strokeWidth={1} />
+            <h4 className="text-[11px] tracking-[3px] uppercase text-white mb-2">Envío de Gala</h4>
+            <p className="text-xs text-white/40 font-light px-8">Entrega internacional asegurada en empaque de madera lacada.</p>
           </div>
-          <div className="hidden md:block w-[1px] h-12 bg-white/10"></div>
-          <div className="flex-1 flex flex-col items-center">
-            <Truck size={24} className="text-[#D4AF37] mb-4" strokeWidth={1} />
-            <h4 className="font-serif text-lg tracking-wide mb-2">Entrega Privilegiada</h4>
-            <p className="text-[11px] text-white/50 font-light max-w-[200px]">Envío asegurado internacional y presentación de gala.</p>
+          <div className="flex flex-col items-center sm:border-l sm:border-white/5">
+            <Gem size={28} className="text-[#D4AF37] mb-4" strokeWidth={1} />
+            <h4 className="text-[11px] tracking-[3px] uppercase text-white mb-2">Atención Exclusiva</h4>
+            <p className="text-xs text-white/40 font-light px-8">Asesoría personalizada y servicio postventa de por vida.</p>
           </div>
         </div>
       </section>
