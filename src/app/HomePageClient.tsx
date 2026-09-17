@@ -8,6 +8,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import { getProducts } from "@/app/actions";
 import Footer from "@/components/Footer";
 import AnnouncementBar from "@/components/AnnouncementBar";
+import ShareCartButton from "@/components/ShareCartButton";
 
 export default function Storefront({ initialProducts }: { initialProducts: any[] }) {
   const [products, setProducts] = useState<any[]>(initialProducts);
@@ -451,6 +452,7 @@ export default function Storefront({ initialProducts }: { initialProducts: any[]
 
             {cartItems.length > 0 && (
               <div className="p-8 border-t border-black/5 bg-white shadow-[0_-10px_40px_rgba(0,0,0,0.03)]">
+                <ShareCartButton />
                 <div className="flex justify-between items-center mb-8">
                   <span className="text-[10px] tracking-[2px] uppercase text-charcoal3 font-medium">Subtotal</span>
                   <span className="font-serif text-3xl text-charcoal">${cartTotal.toLocaleString('es-ES')}</span>

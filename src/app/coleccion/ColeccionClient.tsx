@@ -11,6 +11,7 @@ import Footer from "@/components/Footer";
 import { useCart } from "@/components/CartContext";
 import { toast } from "sonner";
 import AnnouncementBar from "@/components/AnnouncementBar";
+import ShareCartButton from "@/components/ShareCartButton";
 
 export default function Catalog({ initialProducts }: { initialProducts: any[] }) {
   const [products, setProducts] = useState<any[]>(initialProducts);
@@ -440,6 +441,7 @@ export default function Catalog({ initialProducts }: { initialProducts: any[] })
             {/* Footer */}
             {cartItems.length > 0 && (
               <div className="p-8 bg-[#fafafa] border-t border-charcoal/5">
+                <ShareCartButton />
                 <div className="flex justify-between items-center mb-6">
                   <span className="text-[11px] uppercase tracking-widest text-charcoal/60">Subtotal</span>
                   <span className="font-serif text-2xl text-charcoal">${cartTotal}</span>
