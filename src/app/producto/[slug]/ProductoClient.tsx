@@ -211,23 +211,78 @@ export default function ProductoClient({ product }: { product: any }) {
         </div>
       </main>
 
+      {/* --- DESKTOP ENHANCEMENTS: IMMERSIVE STORYTELLING SECTIONS --- */}
+
+      {/* Cinematic Parallax Section */}
+      <section className="relative w-full h-[60vh] md:h-[80vh] mt-20 flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-[#1A1A1A]">
+          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1573408301145-b98c4af00f72?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-fixed bg-center opacity-40 mix-blend-luminosity"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-transparent to-transparent"></div>
+        </div>
+        <div className="relative z-10 text-center max-w-4xl px-6">
+          <span className="text-[#D4AF37] text-[10px] md:text-[12px] tracking-[6px] uppercase mb-6 block font-medium">La Esencia del Tiempo</span>
+          <h2 className="font-serif text-3xl md:text-5xl lg:text-7xl text-white font-light leading-tight mb-8">
+            Forjado en la Excelencia
+          </h2>
+          <div className="w-16 h-[1px] bg-[#D4AF37] mx-auto mb-8"></div>
+          <p className="text-white/70 font-light text-sm md:text-lg lg:text-xl leading-relaxed max-w-2xl mx-auto">
+            Cada creación de Lumina nace de un compromiso inquebrantable con la perfección. Los artesanos más experimentados del mundo dedican cientos de horas a esculpir, pulir y engastar a mano esta pieza, asegurando que su brillo trascienda el paso de las generaciones.
+          </p>
+        </div>
+      </section>
+
+      {/* Anatomía del Lujo - Split Section with Dark Aesthetic */}
+      <section className="w-full bg-[#1A1A1A] text-white flex flex-col md:flex-row">
+        <div className="w-full md:w-1/2 relative min-h-[50vh] md:min-h-0">
+          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1611085583191-a3b181a88401?q=80&w=1500&auto=format&fit=crop')] bg-cover bg-center opacity-60"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#1A1A1A] hidden md:block"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] to-transparent md:hidden"></div>
+        </div>
+        <div className="w-full md:w-1/2 p-10 md:p-20 lg:p-32 flex flex-col justify-center">
+          <span className="text-[#D4AF37] text-[10px] tracking-[4px] uppercase mb-6 block">Anatomía de la Obra</span>
+          <h3 className="font-serif text-3xl md:text-5xl mb-12 font-light text-white">Pureza en los Detalles</h3>
+          
+          <div className="space-y-12">
+            <div>
+              <h4 className="text-[11px] tracking-[3px] uppercase text-white/40 mb-3 flex items-center gap-3">
+                <span className="w-6 h-[1px] bg-[#D4AF37]"></span> El Material
+              </h4>
+              <p className="font-serif text-2xl text-white mb-2">{product.material}</p>
+              <p className="text-white/60 font-light text-sm md:text-base leading-relaxed">Seleccionado meticulosamente por su pureza, garantizando una resistencia eterna y un reflejo inmaculado ante la luz.</p>
+            </div>
+            
+            <div>
+              <h4 className="text-[11px] tracking-[3px] uppercase text-white/40 mb-3 flex items-center gap-3">
+                <span className="w-6 h-[1px] bg-[#D4AF37]"></span> El Acabado
+              </h4>
+              <p className="font-serif text-2xl text-white mb-2">Pulido Espejo</p>
+              <p className="text-white/60 font-light text-sm md:text-base leading-relaxed">Sometido a un proceso de pulido manual con hilos de seda que elimina cualquier imperfección microscópica.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Value Proposition Strip */}
-      <section className="py-12 bg-[#1A1A1A] text-white border-t border-[#1A1A1A]/10 mt-16">
-        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
-          <div className="flex flex-col items-center gap-4">
-            <Gem size={24} className="text-[#D4AF37]" strokeWidth={1} />
-            <h4 className="font-serif text-xl">Calidad Extraordinaria</h4>
-            <p className="text-xs text-white/50 font-light px-4">Rigurosa selección de materiales bajo estándares internacionales.</p>
+      <section className="py-20 md:py-32 bg-[#FCFBF8] border-t border-[#1A1A1A]/5">
+        <div className="text-center mb-16">
+          <h3 className="font-serif text-3xl text-[#1A1A1A] mb-4">El Estándar Lumina</h3>
+          <div className="w-12 h-[1px] bg-[#D4AF37] mx-auto"></div>
+        </div>
+        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-3 gap-12 md:gap-8 text-center">
+          <div className="flex flex-col items-center gap-5">
+            <Gem size={32} className="text-[#D4AF37]" strokeWidth={1} />
+            <h4 className="font-serif text-xl md:text-2xl text-[#1A1A1A]">Calidad Extraordinaria</h4>
+            <p className="text-sm text-[#1A1A1A]/60 font-light px-4 leading-relaxed">Rigurosa selección de materiales bajo estándares internacionales del GIA.</p>
           </div>
-          <div className="flex flex-col items-center gap-4">
-            <ShieldCheck size={24} className="text-[#D4AF37]" strokeWidth={1} />
-            <h4 className="font-serif text-xl">Compra Segura</h4>
-            <p className="text-xs text-white/50 font-light px-4">Transacciones encriptadas y absoluta privacidad de sus datos.</p>
+          <div className="flex flex-col items-center gap-5">
+            <ShieldCheck size={32} className="text-[#D4AF37]" strokeWidth={1} />
+            <h4 className="font-serif text-xl md:text-2xl text-[#1A1A1A]">Compra Segura</h4>
+            <p className="text-sm text-[#1A1A1A]/60 font-light px-4 leading-relaxed">Transacciones encriptadas de grado militar y absoluta privacidad de sus datos.</p>
           </div>
-          <div className="flex flex-col items-center gap-4">
-            <Truck size={24} className="text-[#D4AF37]" strokeWidth={1} />
-            <h4 className="font-serif text-xl">Atención Exclusiva</h4>
-            <p className="text-xs text-white/50 font-light px-4">Empaque insignia de regalo y servicio postventa vitalicio.</p>
+          <div className="flex flex-col items-center gap-5">
+            <Truck size={32} className="text-[#D4AF37]" strokeWidth={1} />
+            <h4 className="font-serif text-xl md:text-2xl text-[#1A1A1A]">Atención Exclusiva</h4>
+            <p className="text-sm text-[#1A1A1A]/60 font-light px-4 leading-relaxed">Empaque insignia de regalo en madera lacada y servicio postventa vitalicio.</p>
           </div>
         </div>
       </section>
